@@ -138,10 +138,11 @@
                     'Content-Type': 'application/json'
                 },
                 }).then(function (response) {
-	                console.log(response.text());
+                    return response.blob();
+                }).then(function(blob) {
+                    var objectURL = URL.createObjectURL(blob);
+                    loadimage.src = objectURL;
                 });
-
-                loadimage.src = api_uri + staffid + '.png';
 
                 loadimage.onload = (function () {
                     //画像ロードが完了してからキャンバスの準備をする
@@ -154,20 +155,6 @@
                     ctx.drawImage(loadimage, 0, 0);
                     // DataUrlをクリア
                     document.getElementsByName('dataurl')[0].value = "";
-
-                    // 編集用一時ファイルの削除
-                    fetch(api_uri + staffid  + '.png' , {
-                        method: 'DELETE',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: '{}'
-                    }).then(function (response) {
-                        console.log(response.text());
-                    }).then(function (text) {
-                        console.log("RESULT: " + text);
-                    });
                 });
 
             }
