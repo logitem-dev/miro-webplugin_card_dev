@@ -156,7 +156,7 @@
                     document.getElementsByName('dataurl')[0].value = "";
 
                     // 編集用一時ファイルの削除
-                    await fetch(api_uri + staffid  + '.png' , {
+                    fetch(api_uri + staffid  + '.png' , {
                         method: 'DELETE',
                         headers: {
                             'Accept': 'application/json',
