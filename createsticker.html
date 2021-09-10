@@ -208,6 +208,19 @@
         
         },false);
 
+		// 文字のバイト数取得(全角を2バイトとする)
+		function getBytes(value){
+		    var length = 0;
+		    for (var i = 0; i < value.length; i++) {
+			    var c = value.charCodeAt(i);
+			    if ((c >= 0x0 && c < 0x81) || (c === 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4)) {
+			        length += 1;
+			    } else {
+			        length += 2;
+			    }
+		    }
+		    return length;
+		}
 
         // Canvas内に文字を表示する
         function drawText(name, ypos, fontsize, font){
