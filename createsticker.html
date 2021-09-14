@@ -59,9 +59,9 @@
 		<canvas id = "canvas2" width="446" height="200"></canvas>
 	 	<canvas id = "canvas" width="446" height="200"></canvas>
 
-	    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 35, 30, '', true)"><br>
-		作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 90, Math.min(555/getBytes(this.value), maxFont) , 'bold ', true)"><br>
-		作業時間  ：<select name="working_hour" onchange="drawText(this.name, 130, 25, '', true)">
+	    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 35, 30, '')"><br>
+		作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 90, Math.min(555/getBytes(this.value), maxFont) , 'bold ')"><br>
+		作業時間  ：<select name="working_hour" onchange="drawText(this.name, 130, 25, '')">
 	                    <option value='-'>-</option>
 	                    <option value='8:00-15:00'>8:00-15:00</option>
 	                    <option value='8:00-12:00'>8:00-12:00</option>
@@ -119,8 +119,9 @@
 		    <textarea name="csv" rows="10" cols="40" readonly style='display:none'></textarea>
 		    
 			<button type="button" onclick='readCSV()'>一括登録</button>
-		 	<canvas id = "canvasBatch" width="446" height="200" style='display:none'></canvas><br>
-
+		    <div class="canvas-wrapper">
+			 	<canvas id = "canvasBatch" width="446" height="200" style='display:none'></canvas><br>
+			</div>
 			<input type='hidden' name='dataurlBatch'>
 
 		</div>
@@ -266,7 +267,7 @@
 		}
 
         // Canvas内に文字を表示する
-        function drawText(name, ypos, fontsize, font, clear){
+        function drawText(name, ypos, fontsize, font){
 
             var text = document.getElementsByName(name);
 
@@ -511,12 +512,14 @@
 					        
 			for(let i=1; i< datas.length; i++){
 				var d = datas[i];
-									
-				await drawText("emploee_id", d[idIndex], 35, 30, '', false);			// スタッフ番号
-				await drawText("emploee_name", d[nameIndex], 90, Math.min(555/getBytes(d[nameIndex]), maxFont), 'bold ', false);			// スタッフ氏名
-				await drawText("working_hour", d[timeIndex], 130, 25, '', false);
-				
-				await createWidgetsBach(d[idIndex], d[nameIndex], d[timeIndex]);
+
+				if(d[idIndex].length > 0){									
+					await drawTextBatch("emploee_id", d[idIndex], 35, 30, '');			// スタッフ番号
+					await drawTextBatch("emploee_name", d[nameIndex], 90, Math.min(555/getBytes(d[nameIndex]), maxFont), 'bold ');			// スタッフ氏名
+					await drawTextBatch("working_hour", d[timeIndex], 130, 25, '');
+					
+					await createWidgetsBach(d[idIndex], d[nameIndex], d[timeIndex]);
+				}
 			}
 			
 			document.body.style.cursor = 'auto';
@@ -525,20 +528,25 @@
 	        miro.board.ui.closeModal();
 		
 		}
-	    
 
-		function getBytes(value){
-		    var length = 0;
-		    for (var i = 0; i < value.length; i++) {
-			    var c = value.charCodeAt(i);
-			    if ((c >= 0x0 && c < 0x81) || (c === 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4)) {
-			        length += 1;
-			    } else {
-			        length += 2;
-			    }
-		    }
-		    return length;
-		}
+	    // Canvas内に文字を表示する(連続登録用)
+	    function drawTextBatch(name, text, ypos, fontsize, font){
+
+	        var canvas = document.getElementById('canvasBatch');
+	        var context = canvas.getContext('2d');
+
+	        context.font = font + fontsize + 'px serif';
+	        context.fillStyle = '#404040';
+	        // 右寄せで表示
+	        context.textBaseline = 'center';
+	        context.textAlign = 'right';
+	        //座標を指定して文字を描く
+	        var x = (canvas.width -15);
+	        var y = (canvas.offsetTop + ypos);
+	        
+	        context.fillText(text, x, y);
+	    }
+
 		
 	    // Widgetを作成して画面を閉じる
 	    async function createWidgetsBach(emploeeId, emploeeName, workingHour){
