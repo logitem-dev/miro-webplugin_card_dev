@@ -457,7 +457,7 @@
 				console.log('onload error', e);
 			});
 			//画像ロードが完了してからキャンバスの準備をする
-			var canvas = document.getElementById('canvasBach');
+			var canvas = document.getElementById('canvasBatch');
 			var ctx = canvas.getContext('2d');
 			//キャンバスのサイズを画像サイズに合わせる
 			canvas.width = res.width;
@@ -543,7 +543,7 @@
 	    // Widgetを作成して画面を閉じる
 	    async function createWidgetsBach(emploeeId, emploeeName, workingHour){
 	    
-	    	document.getElementsByName('dataurlBatch')[0].value = await document.getElementById('canvasBach').toDataURL();
+	    	document.getElementsByName('dataurlBatch')[0].value = await document.getElementById('canvasBatch').toDataURL();
 
 	        setTimeout(function(){
 	            if(document.getElementsByName('dataurlBatch')[0].value === ""){
@@ -586,7 +586,7 @@
 	        
 	        
 	        // 送信用画像情報をクリア
-	        var canvas = await document.getElementById('canvasBach');
+	        var canvas = await document.getElementById('canvasBatch');
 	        var context = await canvas.getContext('2d');
 			await context.clearRect(0, 0, 446, 200);
 	        
