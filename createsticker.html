@@ -114,7 +114,7 @@
 	    </div>    
 		</div>
 		<div id="panel2" class="tab_panel">
-			<input type="file" name="selfilebatch" accept='.csv' required><br><br>
+			<input type="file" name="selfileBatch" accept='.csv' required><br><br>
 			
 		    <textarea name="csv" rows="10" cols="40" readonly style='display:none'></textarea>
 		    
@@ -479,7 +479,7 @@
 		}
 
 	    //ダイアログでファイルが選択された時
-	    var obj1 = document.getElementsByName("selfile");
+	    var obj1 = document.getElementsByName("selfileBatch");
 	    obj1[0].addEventListener("change",function(evt){
 
 	        var file = evt.target.files;
