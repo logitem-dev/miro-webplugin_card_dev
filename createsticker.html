@@ -283,17 +283,16 @@
             var x = (canvas.width -15);
             var y = (canvas.offsetTop + ypos);
 
-			if(clear==true){
-				var yclearpos = fontsize-5;
-				var height = fontsize+6;
-				if(name === 'emploee_name'){
-					// 従業員名称は最大フォント数でクリアする範囲を設定
-					yclearpos = maxFont - 5;
-					height = maxFont + 6;
-				
-				}
-	       		clearText(context, x-282, ypos - yclearpos, height);           // 範囲クリア位置調整
-	       	}
+			var yclearpos = fontsize-5;
+			var height = fontsize+6;
+			if(name === 'emploee_name'){
+				// 従業員名称は最大フォント数でクリアする範囲を設定
+				yclearpos = maxFont - 5;
+				height = maxFont + 6;
+			
+			}
+       		clearText(context, x-282, ypos - yclearpos, height);           // 範囲クリア位置調整
+
             context.fillText(text[0].value, x, y);
         }
 
