@@ -39,7 +39,7 @@
     
 <script src="https://miro.com/app/static/sdk.1.1.js"></script>
 <script src="./js/const.js"></script>
-<body onload="onLoadFunc()">
+<body bgcolor='#9BF9CC' onload="onLoadFunc()">
 <form>
 
 <div class="tab_wrap">
@@ -57,9 +57,7 @@
 
 	    <div class="canvas-wrapper">
 		<canvas id = "canvas2" width="446" height="200"></canvas>
-	 	<canvas id = "canvas" width="446" height="200"></canvas><br>
-
-	    <!-- <img src="" name="image1" height='200' width='167'><br> -->
+	 	<canvas id = "canvas" width="446" height="200"></canvas>
 
 	    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 35, 30, '', true)"><br>
 		作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 90, Math.min(555/getBytes(this.value), maxFont) , 'bold ', true)"><br>
@@ -106,9 +104,9 @@
 	                    <option value='21:00-6:00'>21:00-6:00</option>
 	                    
 	                    </select>
-	        <br><br>
+	        <br>
 
-		<input type='hidden' name='dataurl'><br>
+		<input type='hidden' name='dataurl'>
 	    <input type='hidden' name='oldwidghtId'><br>
 
 		<button type="button" name='register' onclick='UploadAndRegister(false)'>登録</button>
@@ -123,12 +121,11 @@
 			<button type="button" onclick='readCSV()'>一括登録</button>
 		 	<canvas id = "canvasBatch" width="446" height="200" style='display:none'></canvas><br>
 
-			<input type='hidden' name='dataurlBatch'><br>
+			<input type='hidden' name='dataurlBatch'>
 
 		</div>
 	</div>
 </div>
-<br>
 <button type="button" id="close" onclick='closeWindow()'>閉じる</button>
 </form>
 
