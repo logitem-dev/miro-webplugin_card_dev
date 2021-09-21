@@ -551,7 +551,7 @@
 	            
 	            if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
 	            	var id = fromjson[client_id]['staffid'];
-	            	if(id.startsWidth("9")){
+	            	if(id.startsWith("9")){
 		            	cardIds.push(parseInt(id));
 		            }
 	            }
