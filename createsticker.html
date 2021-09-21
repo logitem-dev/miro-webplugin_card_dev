@@ -608,7 +608,7 @@ console.log("cardIdMap=" + cardIdMap);
 	        });
 
 			// 同一IDのカードが存在する場合は削除
-			if(oldWidgetId !== null){
+			if(oldWidgetId != null){
 console.log("oldWidgetId=" + oldWidgetId);
 				await miro.board.widgets.deleteById(oldWidgetId);
 			}
