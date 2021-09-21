@@ -510,6 +510,8 @@
 	
 			// 画面上にある連続登録カードのIDの最大を取得
 			var maxId = getBatchSeqNo();
+			
+console.log(maxId);			
 					        
 			for(let i=1; i< datas.length; i++){
 				var d = datas[i];
@@ -557,12 +559,14 @@
 	            }
 	        });
 	        
+console.log(cardIds);
+	        
 	        if(cardIds.length === 0){
 	        	return 9999999999;
 	        
 	        }else{
 	        
-				return allImages.reduce((a,b) => {return Math.max(a,b);});
+				return cardIds.reduce((a,b) => {return Math.max(a,b);});
 		    }
 	        
 		}
