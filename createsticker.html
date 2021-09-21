@@ -505,28 +505,29 @@
 			let datas = lines.map(line=> line.split(','));
 
 			// ヘッダ情報の取得
-			let nameIndex = await datas[0].indexOf('スタッフ氏名');
-			let timeIndex = await datas[0].indexOf('勤務時間');
+			let staffIDIndex = await datas[0].indexOf('番号');
+			let companyIndex = await datas[0].indexOf('会社');
+			let nameIndex = await datas[0].indexOf('氏名');
+			let timeFromIndex = await datas[0].indexOf('出勤');
+			let timeToIndex = await datas[0].indexOf('退勤');
 	
-			// 画面上にある連続登録カードのIDの最大を取得
-			var cardId = await getBatchSeqNo();
+			var cardIdMap = await getBatchCards();
 					        
 			for(let i=1; i< datas.length; i++){
 				var d = datas[i];
 				
-		    	cardId = parseInt(cardId) + 1;
-		    	if(cardId > 9999999999){
-		    		cardId = 9000000000;
-		    	}
-		    	
-console.log("name=" + d[nameIndex]);
+				var staffId = d[staffIDIndex];
 				
-				if(d[nameIndex].length > 0){
-					await drawTextBatch("emploee_id", cardId, 35, 30, '');			// スタッフ番号
+				var oldWidgetId = cardIdMap.get(staffId);0
+console.log("oldWidgetId=" + oldWidgetId);
+				
+				if(d[0].length > 0){
+					var workinghour = d[timeFromIndex] + "-" + d[timeToIndex];
+					await drawTextBatch("emploee_id", staffId, 35, 30, '');															// スタッフ番号
 					await drawTextBatch("emploee_name", d[nameIndex], 90, Math.min(555/getBytes(d[nameIndex]), maxFont), 'bold ');			// スタッフ氏名
-					await drawTextBatch("working_hour", d[timeIndex], 130, 25, '');
+					await drawTextBatch("working_hour", workinghour , 130, 25, '');
 					
-					await createWidgetsBach(d[cardId], d[nameIndex], d[timeIndex]);
+					await createWidgetsBatch(staffId, d[nameIndex], workinghour, oldWidgetId);
 				}
 			}
 			
@@ -537,14 +538,12 @@ console.log("name=" + d[nameIndex]);
 		
 		}
 		
-		// 連続登録用の連番を取得する。
-		// ボード上の既存のカードの最大を取得する。
-		// カード操作時に内部で使用するものでカード上には表示しない。
-		async function getBatchSeqNo(){
+		// 連続登録用の既存のカードをすべて取得する
+		async function getBatchCards(){
 		
-	        // ボード上のカードからバッチ登録用の最大連番を取得する
+	        // ボード上のカードからバッチ登録用カードを取得する
 	        var allImages = await miro.board.widgets.get({type: 'IMAGE'});
-	        var cardIds = [];
+	        var cardIdMap = new Map();
 	        
 	        allImages.forEach(image => {
 
@@ -552,23 +551,14 @@ console.log("name=" + d[nameIndex]);
 	            var fromjson = JSON.parse(tojson);
 	            
 	            if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
-	            	var id = fromjson[client_id]['staffid'];
-console.log("id=" + id);	            	
+	            	var staffId = fromjson[client_id]['staffid'];
 	            	if(id.startsWith("9")){
-console.log("card added");	            	
-		            	cardIds.push(parseInt(id));
+						cardIdMap.set(staffId, image.id);
 		            }
 	            }
 	        });
 	        
-	        
-	        if(cardIds.length === 0){
-	        	return 9999999999;
-	        
-	        }else{
-	        
-				return cardIds.reduce((a,b) => {return Math.max(a,b);});
-		    }
+			return cardIdMap;
 	        
 		}
 
@@ -592,7 +582,7 @@ console.log("card added");
 
 		
 	    // Widgetを作成して画面を閉じる
-	    async function createWidgetsBach(emploeeId, emploeeName, workingHour){
+	    async function createWidgetsBatch(emploeeId, emploeeName, workingHour, oldWidgetId){
 	    
 	    	document.getElementsByName('dataurlBatch')[0].value = await document.getElementById('canvasBatch').toDataURL();
 
@@ -617,6 +607,11 @@ console.log("card added");
 	            console.log("RESULT: " + text);
 	        });
 
+			// 同一IDのカードが存在する場合は削除
+			if(oldWidgetId !=== ""){
+				await miro.board.widgets.deleteById(oldWidgetId);
+			}
+			                
 	        // Widgetの作成
 	        await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
 
