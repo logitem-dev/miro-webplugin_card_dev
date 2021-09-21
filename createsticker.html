@@ -512,14 +512,14 @@
 			let timeToIndex = await datas[0].indexOf('退勤');
 	
 			var cardIdMap = await getBatchCards();
+console.log("cardIdMap=" + cardIdMap);			
 					        
 			for(let i=1; i< datas.length; i++){
 				var d = datas[i];
 				
 				var staffId = d[staffIDIndex];
 				
-				var oldWidgetId = cardIdMap.get(staffId);0
-console.log("oldWidgetId=" + oldWidgetId);
+				var oldWidgetId = cardIdMap.get(staffId);
 				
 				if(d[0].length > 0){
 					var workinghour = d[timeFromIndex] + "-" + d[timeToIndex];
@@ -608,6 +608,7 @@ console.log("oldWidgetId=" + oldWidgetId);
 	        });
 
 			// 同一IDのカードが存在する場合は削除
+console.log("oldWidgetId=" + oldWidgetId);			
 			if(oldWidgetId !== "undefined"){
 				await miro.board.widgets.deleteById(oldWidgetId);
 			}
