@@ -553,7 +553,9 @@ console.log("name=" + d[nameIndex]);
 	            
 	            if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
 	            	var id = fromjson[client_id]['staffid'];
+console.log("id=" + id);	            	
 	            	if(id.startsWith("9")){
+console.log("card added");	            	
 		            	cardIds.push(parseInt(id));
 		            }
 	            }
