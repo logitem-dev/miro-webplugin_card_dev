@@ -509,7 +509,7 @@
 			let timeIndex = await datas[0].indexOf('勤務時間');
 	
 			// 画面上にある連続登録カードのIDの最大を取得
-			var maxId = getBatchSeqNo();
+			var maxId = await getBatchSeqNo();
 			var cardId = parseInt(maxId) + 1;
 			
 console.log("maxId=" + maxId);			
