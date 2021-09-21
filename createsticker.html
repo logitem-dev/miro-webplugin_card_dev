@@ -505,19 +505,26 @@
 			let datas = lines.map(line=> line.split(','));
 
 			// ヘッダ情報の取得
-			let idIndex = await datas[0].indexOf('スタッフ番号');
 			let nameIndex = await datas[0].indexOf('スタッフ氏名');
 			let timeIndex = await datas[0].indexOf('勤務時間');
+	
+			// 画面上にある連続登録カードのIDの最大を取得
+			var maxId = getBatchSeqNo();
 					        
 			for(let i=1; i< datas.length; i++){
 				var d = datas[i];
-
-				if(d[idIndex].length > 0){									
-					await drawTextBatch("emploee_id", d[idIndex], 35, 30, '');			// スタッフ番号
+				
+				var cardId = parseInt(maxId) + 1;
+		    	if(cardId >= 9999999999){
+		    		cardId === 9000000000;
+		    	}
+				
+				if(d[nameIndex].length > 0){
+					await drawTextBatch("emploee_id", cardId, 35, 30, '');			// スタッフ番号
 					await drawTextBatch("emploee_name", d[nameIndex], 90, Math.min(555/getBytes(d[nameIndex]), maxFont), 'bold ');			// スタッフ氏名
 					await drawTextBatch("working_hour", d[timeIndex], 130, 25, '');
 					
-					await createWidgetsBach(d[idIndex], d[nameIndex], d[timeIndex]);
+					await createWidgetsBach(d[cardId], d[nameIndex], d[timeIndex]);
 				}
 			}
 			
@@ -526,6 +533,38 @@
 	        // ModalWindowを閉じる
 	        miro.board.ui.closeModal();
 		
+		}
+		
+		// 連続登録用の連番を取得する。
+		// ボード上の既存のカードの最大を取得する。
+		// カード操作時に内部で使用するものでカード上には表示しない。
+		function getBatchSeqNo(){
+		
+	        // ボード上のカードからバッチ登録用の最大連番を取得する
+	        var allImages = await miro.board.widgets.get({type: 'IMAGE'});
+	        var cardIds = [];
+	        
+	        allImages.forEach(image => {
+
+	            var tojson = JSON.stringify(image.metadata);
+	            var fromjson = JSON.parse(tojson);
+	            
+	            if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
+	            	var id = fromjson[client_id]['staffid'];
+	            	if(id.startsWidth("9")){
+		            	cardIds.push(parseInt(id));
+		            }
+	            }
+	        });
+	        
+	        if(cardIds.length() === 0){
+	        	return 9999999999;
+	        
+	        }else{
+	        
+				return allImages.reduce((a,b) => {return Math.max(a,b);});
+		    }
+	        
 		}
 
 	    // Canvas内に文字を表示する(連続登録用)
