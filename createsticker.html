@@ -510,8 +510,6 @@
 	
 			// 画面上にある連続登録カードのIDの最大を取得
 			var cardId = await getBatchSeqNo();
-			
-console.log("datas=" + datas);			
 					        
 			for(let i=1; i< datas.length; i++){
 				var d = datas[i];
@@ -521,6 +519,7 @@ console.log("datas=" + datas);
 		    		cardId = 9000000000;
 		    	}
 		    	
+console.log("name=" + d[nameIndex]);
 				
 				if(d[nameIndex].length > 0){
 					await drawTextBatch("emploee_id", cardId, 35, 30, '');			// スタッフ番号
