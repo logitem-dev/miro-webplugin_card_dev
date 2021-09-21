@@ -509,20 +509,18 @@
 			let timeIndex = await datas[0].indexOf('勤務時間');
 	
 			// 画面上にある連続登録カードのIDの最大を取得
-			var maxId = await getBatchSeqNo();
-			var cardId = parseInt(maxId) + 1;
+			var cardId = await getBatchSeqNo();
 			
-console.log("maxId=" + maxId);			
+console.log("datas=" + datas);			
 					        
 			for(let i=1; i< datas.length; i++){
 				var d = datas[i];
 				
+		    	cardId = parseInt(cardId) + 1;
 		    	if(cardId > 9999999999){
 		    		cardId = 9000000000;
 		    	}
-		    	cardId++;
 		    	
-console.log("cardId=" + cardId);		
 				
 				if(d[nameIndex].length > 0){
 					await drawTextBatch("emploee_id", cardId, 35, 30, '');			// スタッフ番号
