@@ -552,7 +552,7 @@ console.log("oldWidgetId=" + oldWidgetId);
 	            
 	            if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
 	            	var staffId = fromjson[client_id]['staffid'];
-	            	if(id.startsWith("9")){
+	            	if(staffId.startsWith("9")){
 						cardIdMap.set(staffId, image.id);
 		            }
 	            }
