@@ -538,7 +538,7 @@
 		// 連続登録用の連番を取得する。
 		// ボード上の既存のカードの最大を取得する。
 		// カード操作時に内部で使用するものでカード上には表示しない。
-		function getBatchSeqNo(){
+		async function getBatchSeqNo(){
 		
 	        // ボード上のカードからバッチ登録用の最大連番を取得する
 	        var allImages = await miro.board.widgets.get({type: 'IMAGE'});
