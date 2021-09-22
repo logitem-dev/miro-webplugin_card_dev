@@ -511,8 +511,7 @@
 			let timeFromIndex = await datas[0].indexOf('出勤');
 			let timeToIndex = await datas[0].indexOf('退勤');
 	
-			var cardIdMap = await getBatchCards();
-console.log("cardIdMap=" + cardIdMap);			
+//			var cardIdMap = await getBatchCards();
 					        
 			for(let i=1; i< datas.length; i++){
 				var d = datas[i];
@@ -523,7 +522,7 @@ console.log("cardIdMap=" + cardIdMap);
 				
 				if(d[0].length > 0){
 					var workinghour = d[timeFromIndex] + "-" + d[timeToIndex];
-					await drawTextBatch("emploee_id", staffId, 35, 30, '');															// スタッフ番号
+					await drawTextBatch("emploee_id", d[companyIndex] + " " + staffId, 35, 30, '');											// 会社記号＋スタッフ番号
 					await drawTextBatch("emploee_name", d[nameIndex], 90, Math.min(555/getBytes(d[nameIndex]), maxFont), 'bold ');			// スタッフ氏名
 					await drawTextBatch("working_hour", workinghour , 130, 25, '');
 					
