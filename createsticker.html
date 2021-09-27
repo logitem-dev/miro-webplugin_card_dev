@@ -621,6 +621,8 @@
 					var newcard = await createWidgetsBatch(staffId, d[nameIndex], workinghour, oldWidgetId);
 					
 	            	// 新規作成位置へ移動
+	            	
+console.log("posxPos="+posxPos);
 	            	            	
 					while(true){
 					
@@ -629,7 +631,9 @@
 					
 						// カードが存在しない位置を探す
 						var cards = newCardsLst.filter(card => card.x === cardxPos && card.y === cardyPos);
+console.log("cards="+cards.length);
 						if(cards.length === 0){
+							newCardsLst.push(newcard[0]);
 							break;
 						}
 					
@@ -646,7 +650,6 @@
 					}
 								
 					miro.board.widgets.transformDelta(newcard[0], cardxPos - newcard[0].x, cardyPos - newcard[0].y);
-					newCardsLst.push(newcard[0]);
 					
 				}
 			}
