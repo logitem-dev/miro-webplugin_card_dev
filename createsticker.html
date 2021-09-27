@@ -649,7 +649,7 @@ console.log("cards="+cards.length);
 					
 					}
 								
-					miro.board.widgets.transformDelta(newcard[0], cardxPos - newcard[0].x, cardyPos - newcard[0].y);
+					await miro.board.widgets.transformDelta(newcard[0], cardxPos - newcard[0].x, cardyPos - newcard[0].y);
 					
 				}
 			}
