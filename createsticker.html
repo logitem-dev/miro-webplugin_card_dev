@@ -785,8 +785,9 @@ console.log("oldWidgetId=" + oldWidgetId);
 	        var cardxPos;
 	        var cardyPos;
 	        
-	        addedCards.forEach(newcard => {
-	        
+			for(let i=0; i< addedCards.length; i++){
+	        	var newcard = addedCards[i];
+	        	
 				while(true){
 				
 			        cardxPos = (posxPos+newcard.bounds.width/2+20);
@@ -812,7 +813,7 @@ console.log("oldWidgetId=" + oldWidgetId);
 							
 				await miro.board.widgets.transformDelta(newcard, cardxPos - newcard.x, cardyPos - newcard.y);
 				newCardsLst.push(newcard);
-			});
+			}
 
 		}
 	    
