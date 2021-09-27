@@ -725,15 +725,17 @@
 	        }).then(function (text) {
 	            console.log("RESULT: " + text);
 	        });
+	        
+	        var newcard;
 
 			// 同一IDのカードが存在する場合は削除
 			if(oldWidgetId != null){
 console.log("oldWidgetId=" + oldWidgetId);
-				await miro.board.widgets.deleteById(oldWidgetId);
+				newcard = await miro.board.widgets.deleteById(oldWidgetId);
 			}
 			                
 	        // Widgetの作成
-	        await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+	        newcard = await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
 
 	        
 	        // 一時ファイルの削除
@@ -757,6 +759,7 @@ console.log("oldWidgetId=" + oldWidgetId);
 			await context.clearRect(0, 0, 446, 200);
 	        
 //			await loadImageBatch();
+			return newcard;
 	                
 	    }
 	    
