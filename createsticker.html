@@ -785,35 +785,38 @@ console.log("oldWidgetId=" + oldWidgetId);
 	        var cardxPos;
 	        var cardyPos;
 	        
+			while(true){
+			
+		        cardxPos = (posxPos+newcard[0].bounds.width/2+20);
+		        cardyPos = (posyPos+newcard[0].bounds.height/2+20);
+			
+				// カードが存在しない位置を探す
+				var cards = newCardsLst.filter(card => card.x === cardxPos && card.y === cardyPos);
+				if(cards.length === 0){
+					break;
+				}
+			}
+					        
+	        
 			for(let i=0; i< addedCards.length; i++){
 	        	var newcard = addedCards[i];
 	        	
-	        	position_loop:
-				while(true){
-				
-			        cardxPos = (posxPos+newcard.bounds.width/2+20);
-			        cardyPos = (posyPos+newcard.bounds.height/2+20);
-				
-					// カードが存在しない位置を探す
-					var cards = newCardsLst.filter(card => card.x === cardxPos && card.y === cardyPos);
-					if(cards.length === 0){
-						break position_loop;
-					}
-				
-					posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
-		          
-					if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
-						posxPos = frameX1;
-						icolPos = 1;
-						posyPos = frameY1 + (newcard.bounds.height * ++irowPos);
-					}else{
-						icolPos++;
-					}
-				
-				}
-							
 				await miro.board.widgets.transformDelta(newcard, cardxPos - newcard.x, cardyPos - newcard.y);
 				newCardsLst.push(newcard);
+	        	
+				posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
+	          
+				if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
+					posxPos = frameX1;
+					icolPos = 1;
+					posyPos = frameY1 + (newcard.bounds.height * ++irowPos);
+				}else{
+					icolPos++;
+				}
+				
+		        cardxPos = (posxPos+newcard.bounds.width/2+20);
+		        cardyPos = (posyPos+newcard.bounds.height/2+20);
+	        	
 			}
 
 		}
