@@ -813,9 +813,10 @@ console.log("oldWidgetId=" + oldWidgetId);
 	        	var newcard = addedCards[i];
 	        	
 				await miro.board.widgets.transformDelta(newcard, cardxPos - newcard.x, cardyPos - newcard.y);
-				newCardsLst.push(newcard);
+//				newCardsLst.push(newcard);
 	        	
 				posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
+console.log("posxPos=" + posxPos);
 	          
 				if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
 					posxPos = frameX1;
