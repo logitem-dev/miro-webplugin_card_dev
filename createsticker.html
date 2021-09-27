@@ -448,13 +448,13 @@
             	
             	var newcard = await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
             	
-console.log("newcard=" + newcard);
+console.log("newcard=" + newcard[0].id);
             	// 新規作成位置へ移動
             	var posxArray = [];
             	var posyArray = [];
             	var newCardsLst = await getNewCardAreaImage(posxArray, posyArray);
             	            	
-            	await setNewCardPosition(newcard, newCardsLst, posxArray[0], posxArray[1], posyArray[0], posyArray[1]);
+            	await setNewCardPosition(newcard[0], newCardsLst, posxArray[0], posxArray[1], posyArray[0], posyArray[1]);
             	
             }
             
