@@ -787,8 +787,8 @@ console.log("oldWidgetId=" + oldWidgetId);
 	        
 			while(true){
 			
-		        cardxPos = (posxPos+newcard[0].bounds.width/2+20);
-		        cardyPos = (posyPos+newcard[0].bounds.height/2+20);
+		        cardxPos = (posxPos+addedCards[0].bounds.width/2+20);
+		        cardyPos = (posyPos+addedCards[0].bounds.height/2+20);
 			
 				// カードが存在しない位置を探す
 				var cards = newCardsLst.filter(card => card.x === cardxPos && card.y === cardyPos);
