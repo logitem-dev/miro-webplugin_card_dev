@@ -451,14 +451,15 @@
             	var newcard = await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
             	
             	// 新規作成位置へ移動
-            	var posxPos;
+            	var posArray = [];
             	var posyPos;
-            	var newCardsLst = await getNewCardAreaImage(posxPos, posyPos);
+            	var newCardsLst = await getNewCardAreaImage(posxPos, posArray);
             	
-console.log("posxPos=" + posxPos);
-console.log("posyPos=" + posyPos);
+console.log("posxPos=" + posArray[0]);
+console.log("posyPos=" + posArray[1]);
+console.log("newcard=" + newcard);
             	
-            	await setNewCardPosition(newcard, newCardsLst, posxPos, posyPos);
+            	await setNewCardPosition(newcard, newCardsLst, posArray[0], posArray[1]);
             	
             }
             
@@ -679,7 +680,7 @@ console.log("oldWidgetId=" + oldWidgetId);
 	    }
 	    
 	    // 新規作成フレーム上にあるカードを取得する
-	    async function getNewCardAreaImage(posxPos, posyPos){
+	    async function getNewCardAreaImage(posxArray){
 
 	    	// 新規登録用のフレームの位置を取得
 			let frameNew = await miro.board.widgets.get({title: '新規作成'});
@@ -708,8 +709,8 @@ console.log("oldWidgetId=" + oldWidgetId);
 	            }
 	        });
 	        
-	        posxPos = frameX1;
-	        posyPos = frameY1;
+			posArray.push(frameX1);
+			posArray.push(frameY1);
 	        
 	        return newCards;
 	    
