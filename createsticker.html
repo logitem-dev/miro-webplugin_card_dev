@@ -630,6 +630,7 @@
 						// カードが存在しない位置を探す
 						var cards = newCardsLst.filter(card => card.x === cardxPos && card.y === cardyPos);
 						if(cards.length === 0){
+							newCardsLst.push(newcard[0]);
 							break;
 						}
 					
