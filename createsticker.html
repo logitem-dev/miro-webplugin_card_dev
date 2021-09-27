@@ -785,11 +785,10 @@ console.log("oldWidgetId=" + oldWidgetId);
 	        var cardxPos;
 	        var cardyPos;
 	        
-console.log("addedCards=" + addedCards);
 			for(let i=0; i< addedCards.length; i++){
 	        	var newcard = addedCards[i];
-console.log("newcard="+ newcard);
 	        	
+	        	position_loop;
 				while(true){
 				
 			        cardxPos = (posxPos+newcard.bounds.width/2+20);
@@ -798,7 +797,7 @@ console.log("newcard="+ newcard);
 					// カードが存在しない位置を探す
 					var cards = newCardsLst.filter(card => card.x === cardxPos && card.y === cardyPos);
 					if(cards.length === 0){
-						break;
+						break position_loop;
 					}
 				
 					posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
