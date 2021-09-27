@@ -795,6 +795,17 @@ console.log("oldWidgetId=" + oldWidgetId);
 				if(cards.length === 0){
 					break;
 				}
+				
+				posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
+	          
+				if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
+					posxPos = frameX1;
+					icolPos = 1;
+					posyPos = frameY1 + (newcard.bounds.height * ++irowPos);
+				}else{
+					icolPos++;
+				}
+				
 			}
 					        
 	        
