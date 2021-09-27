@@ -701,7 +701,6 @@
 
 			// 同一IDのカードが存在する場合は削除
 			if(oldWidgetId != null){
-console.log("oldWidgetId=" + oldWidgetId);
 				newcard = await miro.board.widgets.deleteById(oldWidgetId);
 			}
 			                
@@ -808,7 +807,6 @@ console.log("oldWidgetId=" + oldWidgetId);
 				
 			}
 					        
-console.log("length=" + addedCards.length);
 			for(let i=0; i< addedCards.length; i++){
 	        	var newcard = addedCards[i];
 	        	
@@ -816,7 +814,6 @@ console.log("length=" + addedCards.length);
 //				newCardsLst.push(newcard);
 	        	
 				posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
-console.log("posxPos=" + posxPos);
 	          
 				if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
 					posxPos = frameX1;
