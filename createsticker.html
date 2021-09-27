@@ -435,9 +435,7 @@
             }).then(function (text) {
                 console.log("RESULT: " + text);
             });
-            
-            var newcard;
-
+           
             if(oldid){
 
                 // 元カードの削除
@@ -450,6 +448,7 @@
             	
             	var newcard = await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
             	
+console.log("newcard=" + newcard.id);
             	// 新規作成位置へ移動
             	var posxArray = [];
             	var posyArray = [];
@@ -716,8 +715,6 @@ console.log("oldWidgetId=" + oldWidgetId);
 	    
 	    // 新規カードの配置場所を取得する(通常登録・連続登録共通)
 		async function setNewCardPosition(newcard, newCardsLst, frameX1, frameX2, frameY1, frameY2){
-	    	        	    	        
-console.log("newcard=" + newcard.id);
 
 			var posxPos = frameX1;
 			var posyPos = frameY1;
