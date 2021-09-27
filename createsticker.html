@@ -453,9 +453,10 @@
             	// 新規作成位置へ移動
             	var posxPos;
             	var posyPos;
+            	var newCardsLst = await getNewCardAreaImage(posxPos, posyPos);
+            	
 console.log("posxPos=" + posxPos);
 console.log("posyPos=" + posyPos);
-            	var newCardsLst = await getNewCardAreaImage(posxPos, posyPos);
             	
             	await setNewCardPosition(newcard, newCardsLst, posxPos, posyPos);
             	
