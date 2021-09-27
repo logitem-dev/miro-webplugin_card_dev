@@ -211,7 +211,7 @@
 
         // 初期画像(テキスト等なし)
         var image = new Image();
-        image.src = './img/sticker.png';
+        image.src = './img/white.png';
         image.onload = (function () {
             //画像ロードが完了してからキャンバスの準備をする
             var canvas = document.getElementById('canvas2');
@@ -245,7 +245,7 @@
 
             image.addEventListener('load', function(){
                 // 一旦写真の範囲をクリア
-                clearPicture(context, 1, 5, 145, 162);                    
+                clearPicture(context, 1, 5, 145, 162); 
                 context.drawImage(image,5,10, 130, 156);
             }, false);
 	    
@@ -435,6 +435,8 @@
             }).then(function (text) {
                 console.log("RESULT: " + text);
             });
+            
+            var newcard;
 
             if(oldid){
 
@@ -444,16 +446,28 @@
                 // Widgetの作成
                 await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
 
-                return;
+            }else{            
+            	
+            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+            	
+            	// 新規作成位置へ移動
+            	var posxPos;
+            	var posyPos;
+console.log("posxPos=" + posxPos);
+console.log("posyPos=" + posyPos);
+            	var newCardList = await getNewCardAreaImage(posxPos, posyPos);
+            	
+            	await setNewCardPosition(newcard, newCardsLst, posxPos, posyPos);
+            	
             }
-            await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+            
         }
 
 	/*
 	/ ↓一括登録用のFunction        
 	*/
-		async function loadImageBatch() {
-			const res = await imageOnLoad('').catch(e => {
+		async function loadImageBatch(cardName) {
+			const res = await imageOnLoad(cardName).catch(e => {
 				console.log('onload error', e);
 			});
 			//画像ロードが完了してからキャンバスの準備をする
@@ -469,12 +483,12 @@
 		}
 
 		
-		function imageOnLoad() {
+		function imageOnLoad(cardName) {
 		  return new Promise((resolve, reject) => {
 		    const img = new Image();
 		    img.onload = () => resolve(img);
 		    img.onerror = (e) => reject(e);
-		    img.src = './img/sticker.png';
+		    img.src = './img/' + cardName + '.png';
 		  });
 		}
 
@@ -521,12 +535,35 @@
 				var oldWidgetId = cardIdMap.get(staffId);
 				
 				if(d[0].length > 0){
+				
+					// 会社ごとにカードの色を変更
+					var cardName = "sticker";
+					switch (d[companyIndex]){
+						case "バイトレ":
+							cardName = "green";
+							break;
+							
+						case "フルキャスト":
+							cardName = "red";
+							break;
+							
+						case "ヒロスタッフ":
+							cardName = "blue";
+							break;
+
+						default:
+							cardName = "sticker";
+							break;
+							
+					}
+					await loadImageBatch(cardName);
+				
 					var workinghour = d[timeFromIndex] + "-" + d[timeToIndex];
 					await drawTextBatch("emploee_id", d[companyIndex] + " " + staffId, 35, 30, '');											// 会社記号＋スタッフ番号
 					await drawTextBatch("emploee_name", d[nameIndex], 90, Math.min(555/getBytes(d[nameIndex]), maxFont), 'bold ');			// スタッフ氏名
 					await drawTextBatch("working_hour", workinghour , 130, 25, '');
 					
-					await createWidgetsBatch(staffId, d[nameIndex], workinghour, oldWidgetId);
+					await createWidgetsBatch(staffId, d[nameIndex], workinghour, xpos, ypos, oldWidgetId);
 				}
 			}
 			
@@ -581,7 +618,7 @@
 
 		
 	    // Widgetを作成して画面を閉じる
-	    async function createWidgetsBatch(emploeeId, emploeeName, workingHour, oldWidgetId){
+	    async function createWidgetsBatch(emploeeId, emploeeName, workingHour, xpos, ypos, oldWidgetId){
 	    
 	    	document.getElementsByName('dataurlBatch')[0].value = await document.getElementById('canvasBatch').toDataURL();
 
@@ -613,7 +650,7 @@ console.log("oldWidgetId=" + oldWidgetId);
 			}
 			                
 	        // Widgetの作成
-	        await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+	        await miro.board.widgets.create({ type: 'image', x: xpos, y: ypos, scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
 
 	        
 	        // 一時ファイルの削除
@@ -636,10 +673,87 @@ console.log("oldWidgetId=" + oldWidgetId);
 	        var context = await canvas.getContext('2d');
 			await context.clearRect(0, 0, 446, 200);
 	        
-			await loadImageBatch();
+//			await loadImageBatch();
 	                
 	    }
-    </script>        
+	    
+	    // 新規作成フレーム上にあるカードを取得する
+	    async function getNewCardAreaImage(posxPos, posyPos){
+
+	    	// 新規登録用のフレームの位置を取得
+			let frameNew = await miro.board.widgets.get({title: '新規作成'});
+			
+			var frameX1 = frameNew[0].bounds.x - frameNew[0].bounds.width/2;
+            var frameX2 = frameNew[0].bounds.x + frameNew[0].bounds.width/2;
+			var frameY1 = frameNew[0].bounds.y - frameNew[0].bounds.height/2;
+			var frameY2 = frameNew[0].bounds.y + frameNew[0].bounds.height/2;
+			
+			
+			// 全イメージの取得
+			var allImages = await miro.board.widgets.get({type: 'IMAGE'});
+			
+			// 新規登録フレーム上にあるスタッフカードのみ抽出
+			var newCards = [];
+	        allImages.forEach(image => {
+
+	            var tojson = JSON.stringify(image.metadata);
+	            var fromjson = JSON.parse(tojson);
+	            
+	            if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
+	            	// カードがフレームの範囲内に収まっているか
+					if(image.x >= frameX1 && image.x <= frameX2 && image.y >= frameY1 && image.y <= frameY2){
+						newCards.push(image);
+					}
+	            }
+	        });
+	        
+	        posxPos = frameX1;
+	        posyPos = frameY1;
+	        
+	        return newCards;
+	    
+	    }
+	    
+	    // 新規カードの配置場所を取得する(通常登録・連続登録共通)
+		async function setNewCardPosition(newcard, newCardsLst, posxPos, posyPos){
+	    	        	    	        
+//	        let posxPos = frameX1;
+//	        let posyPos = frameY1;
+	        
+	        let irowPos = 0;
+	        let icolPos = 1;
+	        
+	        var cardxPos;
+	        var cardyPos;
+	        
+			while(true){
+			
+		        cardxPos = (posxPos+newcard.bounds.width/2+20);
+		        cardyPos = (posyPos+newcard.bounds.height/2+20);
+			
+				// カードが存在しない位置を探す
+				var cards = newCardsLst.filter(card => card.x === cardxPos && card.y === cardyPos);
+				if(cards.length === 0){
+					break;
+				}
+			
+				posxPos = frameX1 + (card.bounds.width + 20) * icolPos;
+	          
+				if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
+					posxPos = frameX1;
+					icolPos = 1;
+					posyPos = frameY1 + (newcard.bounds.height * ++irowPos);
+				}else{
+					icolPos++;
+				}
+			
+			}
+						
+			miro.board.widgets.transformDelta(newcard, cardxPos - newcard.x, cardyPos - newcard.y);
+
+		}
+	    
+    </script>
   </body>    
     
 </html>
