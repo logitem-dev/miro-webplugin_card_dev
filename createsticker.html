@@ -458,10 +458,49 @@
             }
             
         }
+        
+	    // 新規カードの配置場所を取得する(通常登録用)
+		async function setNewCardPosition(newcard, newCardsLst, frameX1, frameX2, frameY1, frameY2){
 
-	/*
-	/ ↓一括登録用のFunction        
-	*/
+			var posxPos = frameX1;
+			var posyPos = frameY1;
+	        
+	        var irowPos = 0;
+	        var icolPos = 1;
+	        
+	        var cardxPos;
+	        var cardyPos;
+	        
+			while(true){
+			
+		        cardxPos = (posxPos+newcard.bounds.width/2+20);
+		        cardyPos = (posyPos+newcard.bounds.height/2+20);
+			
+				// カードが存在しない位置を探す
+				var cards = newCardsLst.filter(card => card.x === cardxPos && card.y === cardyPos);
+				if(cards.length === 0){
+					break;
+				}
+			
+				posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
+	          
+				if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
+					posxPos = frameX1;
+					icolPos = 1;
+					posyPos = frameY1 + (newcard.bounds.height * ++irowPos);
+				}else{
+					icolPos++;
+				}
+			
+			}
+						
+			miro.board.widgets.transformDelta(newcard, cardxPos - newcard.x, cardyPos - newcard.y);
+
+		}
+
+		/*************************
+		/ ↓一括登録用のFunction        
+		**************************/
 		async function loadImageBatch(cardName) {
 			const res = await imageOnLoad(cardName).catch(e => {
 				console.log('onload error', e);
@@ -579,7 +618,7 @@
 					await drawTextBatch("emploee_name", d[nameIndex], 90, Math.min(555/getBytes(d[nameIndex]), maxFont), 'bold ');			// スタッフ氏名
 					await drawTextBatch("working_hour", workinghour , 130, 25, '');
 					
-					var newcard = await createWidgetsBatch(staffId, d[nameIndex], workinghour, xpos, ypos, oldWidgetId);
+					var newcard = await createWidgetsBatch(staffId, d[nameIndex], workinghour, oldWidgetId);
 					
 	            	// 新規作成位置へ移動
 	            	            	
@@ -662,7 +701,7 @@
 
 		
 	    // Widgetを作成して画面を閉じる
-	    async function createWidgetsBatch(emploeeId, emploeeName, workingHour, xpos, ypos, oldWidgetId){
+	    async function createWidgetsBatch(emploeeId, emploeeName, workingHour, oldWidgetId){
 	    
 	    	document.getElementsByName('dataurlBatch')[0].value = await document.getElementById('canvasBatch').toDataURL();
 
@@ -694,7 +733,7 @@ console.log("oldWidgetId=" + oldWidgetId);
 			}
 			                
 	        // Widgetの作成
-	        await miro.board.widgets.create({ type: 'image', x: xpos, y: ypos, scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+	        await miro.board.widgets.create({ type: 'image', scale: 1.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
 
 	        
 	        // 一時ファイルの削除
@@ -721,7 +760,7 @@ console.log("oldWidgetId=" + oldWidgetId);
 	                
 	    }
 	    
-	    // 新規作成フレーム上にあるカードを取得する
+	    // 新規作成フレーム上にあるカードを取得する(通常登録、連続登録共通)
 	    async function getNewCardAreaImage(posxArray, posyArray){
 
 	    	// 新規登録用のフレームの位置を取得
@@ -759,45 +798,6 @@ console.log("oldWidgetId=" + oldWidgetId);
 	        return newCards;
 	    
 	    }
-	    
-	    // 新規カードの配置場所を取得する(通常登録用)
-		async function setNewCardPosition(newcard, newCardsLst, frameX1, frameX2, frameY1, frameY2){
-
-			var posxPos = frameX1;
-			var posyPos = frameY1;
-	        
-	        var irowPos = 0;
-	        var icolPos = 1;
-	        
-	        var cardxPos;
-	        var cardyPos;
-	        
-			while(true){
-			
-		        cardxPos = (posxPos+newcard.bounds.width/2+20);
-		        cardyPos = (posyPos+newcard.bounds.height/2+20);
-			
-				// カードが存在しない位置を探す
-				var cards = newCardsLst.filter(card => card.x === cardxPos && card.y === cardyPos);
-				if(cards.length === 0){
-					break;
-				}
-			
-				posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
-	          
-				if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
-					posxPos = frameX1;
-					icolPos = 1;
-					posyPos = frameY1 + (newcard.bounds.height * ++irowPos);
-				}else{
-					icolPos++;
-				}
-			
-			}
-						
-			miro.board.widgets.transformDelta(newcard, cardxPos - newcard.x, cardyPos - newcard.y);
-
-		}
 	    
     </script>
   </body>    
