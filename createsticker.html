@@ -453,11 +453,7 @@
             	// 新規作成位置へ移動
             	var posArray = [];
             	var newCardsLst = await getNewCardAreaImage(posArray);
-            	
-console.log("posxPos=" + posArray[0]);
-console.log("posyPos=" + posArray[1]);
-console.log("newcard=" + newcard);
-            	
+            	            	
             	await setNewCardPosition(newcard, newCardsLst, posArray[0], posArray[1]);
             	
             }
@@ -720,6 +716,8 @@ console.log("oldWidgetId=" + oldWidgetId);
 	    	        	    	        
 //	        let posxPos = frameX1;
 //	        let posyPos = frameY1;
+
+console.log("newcard=" + newcard);
 	        
 	        let irowPos = 0;
 	        let icolPos = 1;
@@ -738,7 +736,7 @@ console.log("oldWidgetId=" + oldWidgetId);
 					break;
 				}
 			
-				posxPos = frameX1 + (card.bounds.width + 20) * icolPos;
+				posxPos = frameX1 + (newcard.bounds.width + 20) * icolPos;
 	          
 				if(posxPos + newcard.bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
 					posxPos = frameX1;
