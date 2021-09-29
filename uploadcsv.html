@@ -55,7 +55,7 @@
       var d = new Date();
       var today = d.getFullYear() + "/" + ('0' + (d.getMonth() + 1)).slice(-2) + "/" + ('0' + (d.getDate())).slice(-2);
 console.log("today" + today);      
-      let todayData = datas.filter(d=> d[dateIndex] === today);
+      let todayData = datas.filter(d=> d[dateIndex] == today);
       
 console.log("todayData" + todayData);
 
