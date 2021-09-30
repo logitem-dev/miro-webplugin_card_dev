@@ -739,7 +739,8 @@
 	    	// 新規登録用のフレームの位置を取得
 			let frameNew = await miro.board.widgets.get({title: '新規作成'});
 			
-			if(frameNew == null){
+console.log(frameNew);			
+			if(frameNew[0] == null){
 				// 新規登録フレームが存在しない場合は処理終了
 				return;
 			}
