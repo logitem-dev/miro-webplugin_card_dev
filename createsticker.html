@@ -452,6 +452,10 @@
             	var posxArray = [];
             	var posyArray = [];
             	var newCardsLst = await getNewCardAreaImage(posxArray, posyArray);
+            	
+            	if(newCardsLst.length === 0){
+            		return;
+            	}
             	            	
             	await setNewCardPosition(newcard[0], newCardsLst, posxArray[0], posxArray[1], posyArray[0], posyArray[1]);
             	
