@@ -138,7 +138,7 @@ console.log("sleep");
 					if(listOn.includes(fromjson[client_id]['staffid'])){
 
 						// 出勤者
-						miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y);
+						await miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y);
 
 						posxOn = xOn + (card.bounds.width + 20) * icolOn;
 					  
@@ -153,7 +153,7 @@ console.log("sleep");
 					}else if(listOff.includes(fromjson[client_id]['staffid'])){
 
 						// 休暇者
-						miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y);
+						await miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y);
 
 						posxOff = xOff + (card.bounds.width + 20) * icolOff;
 					  
@@ -167,7 +167,7 @@ console.log("sleep");
 
 					}else{
 						// 管理外
-						miro.board.widgets.transformDelta(card, (posxOut+card.bounds.width/2+20)-card.x, (posyOut+card.bounds.height/2+20)-card.y);
+						await miro.board.widgets.transformDelta(card, (posxOut+card.bounds.width/2+20)-card.x, (posyOut+card.bounds.height/2+20)-card.y);
 
 						posxOut = xOut + (card.bounds.width + 20) * icolOut;
 					  
