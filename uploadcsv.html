@@ -142,6 +142,7 @@
 								document.body.style.cursor = 'auto';
 								//miro.showNotification('ボードの初期化に失敗しました。');
 								errMessage.innerHTML = "ボードの初期化に失敗しました";
+								return;
 
 							});
 
@@ -164,6 +165,7 @@
 								//miro.showNotification('ボードの初期化に失敗しました。');
 								errMessage.innerHTML = "ボードの初期化に失敗しました";
 								//closeWindow();
+								return;
 							});
 					
 
@@ -185,6 +187,7 @@
 								//miro.showNotification('ボードの初期化に失敗しました。');
 								errMessage.innerHTML = "ボードの初期化に失敗しました";
 								//closeWindow();
+								return;
 							});
 
 					posxOut = xOut + (card.bounds.width + 20) * icolOut;
