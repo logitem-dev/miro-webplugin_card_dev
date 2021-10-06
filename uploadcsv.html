@@ -126,8 +126,8 @@
 		for(let i=0; i< allCards.length; i++){
 			var card = allCards[i];
 				        
-			if(i >0 && i % 10 == 0){
-				await sleep(5000);
+			if(i >0 && i % 100 == 0){
+				await sleep(20000);
 			}
         
 			var tojson = JSON.stringify(card.metadata);
