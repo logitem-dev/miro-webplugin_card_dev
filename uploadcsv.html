@@ -180,14 +180,14 @@ console.log("sleep");
 						}
 
 					}
-				}catch(error){
-					document.body.style.cursor = 'auto';
-					miro.showNotification('ボードの初期化に失敗しました。');
-					closeWindow();
+
 				}
-
-
+			}catch(error){
+				document.body.style.cursor = 'auto';
+				miro.showNotification('ボードの初期化に失敗しました。');
+				closeWindow();
 			}
+				
         }
 
 		document.body.style.cursor = 'auto';
