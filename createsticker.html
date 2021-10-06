@@ -821,8 +821,10 @@
 			for(let i=0; i< addedCards.length; i++){
 	        	var newcard = addedCards[i];
 	        	
+console.log("i=" + i);	        	
 	        	if(i % 50 == 0){
-					sleep(30000);
+					await sleep(30000);
+sleep					
 	        	}
 	        	
 				await miro.board.widgets.transformDelta(newcard, cardxPos - newcard.x, cardyPos - newcard.y);
