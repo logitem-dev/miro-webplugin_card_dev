@@ -12,7 +12,7 @@
 	<input type="file" name="selfile" accept='.csv' required><br><br>
 
     <textarea name="csv" rows="10" cols="40" readonly style='display:none'></textarea>
-	<div id="output"></div>
+	<div id="output"></div></br>
 
 	<button type="button" onclick='readCSV()'>アップロード</button>
 	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
@@ -142,7 +142,6 @@
 								document.body.style.cursor = 'auto';
 								//miro.showNotification('ボードの初期化に失敗しました。');
 								errMessage.innerHTML = "ボードの初期化に失敗しました";
-								return;
 
 							});
 
@@ -165,7 +164,6 @@
 								//miro.showNotification('ボードの初期化に失敗しました。');
 								errMessage.innerHTML = "ボードの初期化に失敗しました";
 								//closeWindow();
-								return;
 							});
 					
 
@@ -187,7 +185,6 @@
 								//miro.showNotification('ボードの初期化に失敗しました。');
 								errMessage.innerHTML = "ボードの初期化に失敗しました";
 								//closeWindow();
-								return;
 							});
 
 					posxOut = xOut + (card.bounds.width + 20) * icolOut;
@@ -207,8 +204,12 @@
         }
 
 		document.body.style.cursor = 'auto';
-        // Show success message
-          miro.showNotification('ボードを初期化しました。')  
+		
+		if(errMessage.innerHTML){
+	        // Show success message
+	          miro.showNotification('ボードを初期化しました。')  
+	          closeWindow();
+	    }
       }
     }
 
