@@ -12,6 +12,7 @@
 	<input type="file" name="selfile" accept='.csv' required><br><br>
 
     <textarea name="csv" rows="10" cols="40" readonly style='display:none'></textarea>
+	<div id="output"></div>
 
 	<button type="button" onclick='readCSV()'>アップロード</button>
 	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
@@ -116,6 +117,8 @@
         let posyOut = yOut;   
         
    		const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime) );
+   		
+		var errMessage = document.getElementById("output");
         
 
         // カードオブジェクトを出勤者・休暇者Frame上に移動
@@ -123,9 +126,9 @@
 		for(let i=0; i< allCards.length; i++){
 			var card = allCards[i];
 				        
-			if(i >0 && i % 10 == 0){
-				await sleep(3000);
-			}
+//			if(i >0 && i % 10 == 0){
+//				await sleep(3000);
+//			}
         
 			var tojson = JSON.stringify(card.metadata);
 			var fromjson = JSON.parse(tojson);
@@ -137,8 +140,8 @@
 					miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y)
 							.catch(error=> {
 								document.body.style.cursor = 'auto';
-								miro.showNotification('ボードの初期化に失敗しました。');
-								closeWindow();
+								//miro.showNotification('ボードの初期化に失敗しました。');
+								errMessage.innerHTML = "ボードの初期化に失敗しました";
 
 							});
 
@@ -158,8 +161,9 @@
 					miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y)
 							.catch(error=> {
 								document.body.style.cursor = 'auto';
-								miro.showNotification('ボードの初期化に失敗しました。');
-								closeWindow();
+								//miro.showNotification('ボードの初期化に失敗しました。');
+								errMessage.innerHTML = "ボードの初期化に失敗しました";
+								//closeWindow();
 							});
 					
 
@@ -178,8 +182,9 @@
 					miro.board.widgets.transformDelta(card, (posxOut+card.bounds.width/2+20)-card.x, (posyOut+card.bounds.height/2+20)-card.y)
 							.catch(error=> {
 								document.body.style.cursor = 'auto';
-								miro.showNotification('ボードの初期化に失敗しました。');
-								closeWindow();
+								//miro.showNotification('ボードの初期化に失敗しました。');
+								errMessage.innerHTML = "ボードの初期化に失敗しました";
+								//closeWindow();
 							});
 
 					posxOut = xOut + (card.bounds.width + 20) * icolOut;
