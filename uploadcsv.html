@@ -73,6 +73,8 @@
       let needToClear = confirm("勤怠ファイルを読み込みボードを初期化します。よろしいですか？");
 
       if(needToClear){
+      
+      	document.body.style.cursor = 'wait';
 
         // 全従業員カードオブジェクトの取得
         let allCards = await miro.board.widgets.get({type: 'IMAGE'})
@@ -123,7 +125,7 @@
 			
 console.log("i=" + i);	        	
 	       	if(i % 50 == 0){
-				await sleep(30000);
+				await sleep(5000);
 console.log("sleep");
 	        }
         
@@ -180,6 +182,7 @@ console.log("sleep");
 			}
         }
 
+		document.body.style.cursor = 'auto';
         // Show success message
           miro.showNotification('ボードを初期化しました。')  
       }
