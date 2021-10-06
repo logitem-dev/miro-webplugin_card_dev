@@ -815,9 +815,15 @@
 				}
 				
 			}
+			
+       		const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime) );
 					        
 			for(let i=0; i< addedCards.length; i++){
 	        	var newcard = addedCards[i];
+	        	
+	        	if(i % 50 == 0){
+					sleep(5000);
+	        	}
 	        	
 				await miro.board.widgets.transformDelta(newcard, cardxPos - newcard.x, cardyPos - newcard.y);
 	        	
