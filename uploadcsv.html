@@ -123,63 +123,73 @@
 		for(let i=0; i< allCards.length; i++){
 			var card = allCards[i];
 				        
-	        try{
         
-				var tojson = JSON.stringify(card.metadata);
-				var fromjson = JSON.parse(tojson);
+			var tojson = JSON.stringify(card.metadata);
+			var fromjson = JSON.parse(tojson);
 
-				if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
-					if(listOn.includes(fromjson[client_id]['staffid'])){
+			if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
+				if(listOn.includes(fromjson[client_id]['staffid'])){
 
-						// 出勤者
-						await miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y);
+					// 出勤者
+					miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y)
+							.catch(error=> {
+								document.body.style.cursor = 'auto';
+								miro.showNotification('ボードの初期化に失敗しました。');
+								closeWindow();
+							});
 
-						posxOn = xOn + (card.bounds.width + 20) * icolOn;
-					  
-						if(posxOn + card.bounds.width > xOn2 - 20){       // Frameの横幅を超ええる場合は改行
-							posxOn = xOn;
-							icolOn = 1;
-							posyOn = yOn + (card.bounds.height * ++irowOn);
-						}else{
-							icolOn++;                
-						}
-
-					}else if(listOff.includes(fromjson[client_id]['staffid'])){
-
-						// 休暇者
-						await miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y);
-
-						posxOff = xOff + (card.bounds.width + 20) * icolOff;
-					  
-						if(posxOff + card.bounds.width > xOff2 - 20){       // Frameの横幅を超ええる場合は改行
-							posxOff = xOff;
-							icolOff = 1;
-							posyOff = yOff + (card.bounds.height * ++irowOff);
-						}else{
-							icolOff++;                
-						}
-
+					posxOn = xOn + (card.bounds.width + 20) * icolOn;
+				  
+					if(posxOn + card.bounds.width > xOn2 - 20){       // Frameの横幅を超ええる場合は改行
+						posxOn = xOn;
+						icolOn = 1;
+						posyOn = yOn + (card.bounds.height * ++irowOn);
 					}else{
-						// 管理外
-						await miro.board.widgets.transformDelta(card, (posxOut+card.bounds.width/2+20)-card.x, (posyOut+card.bounds.height/2+20)-card.y);
+						icolOn++;                
+					}
 
-						posxOut = xOut + (card.bounds.width + 20) * icolOut;
-					  
-						if(posxOut + card.bounds.width > xOut2 - 20){       // Frameの横幅を超ええる場合は改行
-							posxOut = xOut;
-							icolOut = 1;
-							posyOut = yOut + (card.bounds.height * ++irowOut);
-						}else{
-							icolOut++;                
-						}
+				}else if(listOff.includes(fromjson[client_id]['staffid'])){
 
+					// 休暇者
+					miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y)
+							.catch(error=> {
+								document.body.style.cursor = 'auto';
+								miro.showNotification('ボードの初期化に失敗しました。');
+								closeWindow();
+							});
+					
+
+					posxOff = xOff + (card.bounds.width + 20) * icolOff;
+				  
+					if(posxOff + card.bounds.width > xOff2 - 20){       // Frameの横幅を超ええる場合は改行
+						posxOff = xOff;
+						icolOff = 1;
+						posyOff = yOff + (card.bounds.height * ++irowOff);
+					}else{
+						icolOff++;                
+					}
+
+				}else{
+					// 管理外
+					miro.board.widgets.transformDelta(card, (posxOut+card.bounds.width/2+20)-card.x, (posyOut+card.bounds.height/2+20)-card.y)
+							.catch(error=> {
+								document.body.style.cursor = 'auto';
+								miro.showNotification('ボードの初期化に失敗しました。');
+								closeWindow();
+							});
+
+					posxOut = xOut + (card.bounds.width + 20) * icolOut;
+				  
+					if(posxOut + card.bounds.width > xOut2 - 20){       // Frameの横幅を超ええる場合は改行
+						posxOut = xOut;
+						icolOut = 1;
+						posyOut = yOut + (card.bounds.height * ++irowOut);
+					}else{
+						icolOut++;                
 					}
 
 				}
-			}catch(error){
-				document.body.style.cursor = 'auto';
-				miro.showNotification('ボードの初期化に失敗しました。');
-				closeWindow();
+
 			}
 				
         }
