@@ -12,7 +12,7 @@
 	<input type="file" name="selfile" accept='.csv' required><br><br>
 
     <textarea name="csv" rows="10" cols="40" readonly style='display:none'></textarea>
-	<div id="output" style="color:red; font-weight:bold;"></div></br>
+	<div id="output" style="color:red; font-weight:bold; display:none;">アップロードが正常に完了しました。</div></br>
 
 	<button type="button" onclick='readCSV()'>アップロード</button>
 	<button type="button" id="close" onclick='closeWindow()'>閉じる</button>
@@ -204,12 +204,8 @@
         }
 
 		document.body.style.cursor = 'auto';
-console.log(errMessage.innerHTML);
-		if(errMessage.innerHTML == ""){
-	        // Show success message
-	          miro.showNotification('ボードを初期化しました。')  
-	          closeWindow();
-	    }
+		errMessage.style.display='block';
+		
       }
     }
 
