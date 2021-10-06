@@ -115,20 +115,14 @@
         let posxOut = xOut;
         let posyOut = yOut;   
         
-   		const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime) );
+//   		const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime) );
         
 
         // カードオブジェクトを出勤者・休暇者Frame上に移動
         //allCards.forEach(card => {
 		for(let i=0; i< allCards.length; i++){
 			var card = allCards[i];
-			
-console.log("i=" + i);	        	
-	       	if(i > 0 && i % 50 == 0){
-				await sleep(10000);
-console.log("sleep");
-	        }
-	        
+				        
 	        try{
         
 				var tojson = JSON.stringify(card.metadata);
