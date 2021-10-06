@@ -123,6 +123,9 @@
 		for(let i=0; i< allCards.length; i++){
 			var card = allCards[i];
 				        
+			if(i >0 and i % 100 == 0){
+				await sleep(10000);
+			}
         
 			var tojson = JSON.stringify(card.metadata);
 			var fromjson = JSON.parse(tojson);
@@ -133,10 +136,9 @@
 					// 出勤者
 					miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y)
 							.catch(error=> {
-//								document.body.style.cursor = 'auto';
-//								miro.showNotification('ボードの初期化に失敗しました。');
-//								closeWindow();
-								await sleep(10000);
+								document.body.style.cursor = 'auto';
+								miro.showNotification('ボードの初期化に失敗しました。');
+								closeWindow();
 
 							});
 
@@ -155,10 +157,9 @@
 					// 休暇者
 					miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y)
 							.catch(error=> {
-//								document.body.style.cursor = 'auto';
-//								miro.showNotification('ボードの初期化に失敗しました。');
-//								closeWindow();
-								await sleep(10000);
+								document.body.style.cursor = 'auto';
+								miro.showNotification('ボードの初期化に失敗しました。');
+								closeWindow();
 							});
 					
 
@@ -176,10 +177,9 @@
 					// 管理外
 					miro.board.widgets.transformDelta(card, (posxOut+card.bounds.width/2+20)-card.x, (posyOut+card.bounds.height/2+20)-card.y)
 							.catch(error=> {
-//								document.body.style.cursor = 'auto';
-//								miro.showNotification('ボードの初期化に失敗しました。');
-//								closeWindow();
-								await sleep(10000);
+								document.body.style.cursor = 'auto';
+								miro.showNotification('ボードの初期化に失敗しました。');
+								closeWindow();
 							});
 
 					posxOut = xOut + (card.bounds.width + 20) * icolOut;
