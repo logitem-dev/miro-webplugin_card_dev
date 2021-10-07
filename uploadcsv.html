@@ -126,9 +126,9 @@
 		for(let i=0; i< allCards.length; i++){
 			var card = allCards[i];
 				        
-			if(i >0 && i % 10 == 0){
-				await sleep(5000);
-			}
+//			if(i >0 && i % 10 == 0){
+//				await sleep(5000);
+//			}
         
 			var tojson = JSON.stringify(card.metadata);
 			var fromjson = JSON.parse(tojson);
@@ -137,13 +137,15 @@
 				if(listOn.includes(fromjson[client_id]['staffid'])){
 
 					// 出勤者
-					miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y)
-							.catch(error=> {
-								document.body.style.cursor = 'auto';
-								//miro.showNotification('ボードの初期化に失敗しました。');
-								errMessage.innerHTML = "ボードの初期化に失敗しました";
+//					miro.board.widgets.transformDelta(card, (posxOn+card.bounds.width/2+20)-card.x, (posyOn+card.bounds.height/2+20)-card.y)
+//							.catch(error=> {
+//								document.body.style.cursor = 'auto';
+//								//miro.showNotification('ボードの初期化に失敗しました。');
+//								errMessage.innerHTML = "ボードの初期化に失敗しました";
+//							});
 
-							});
+					card.x = posxOn;
+					card.y = posyOn;
 
 					posxOn = xOn + (card.bounds.width + 20) * icolOn;
 				  
@@ -158,14 +160,16 @@
 				}else if(listOff.includes(fromjson[client_id]['staffid'])){
 
 					// 休暇者
-					miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y)
-							.catch(error=> {
-								document.body.style.cursor = 'auto';
-								//miro.showNotification('ボードの初期化に失敗しました。');
-								errMessage.innerHTML = "ボードの初期化に失敗しました";
-								//closeWindow();
-							});
+//					miro.board.widgets.transformDelta(card, (posxOff+card.bounds.width/2+20)-card.x, (posyOff+card.bounds.height/2+20)-card.y)
+//							.catch(error=> {
+//								document.body.style.cursor = 'auto';
+//								//miro.showNotification('ボードの初期化に失敗しました。');
+//								errMessage.innerHTML = "ボードの初期化に失敗しました";
+//								//closeWindow();
+//							});
 					
+					card.x = posxOff;
+					card.y = posyOff;
 
 					posxOff = xOff + (card.bounds.width + 20) * icolOff;
 				  
@@ -179,13 +183,16 @@
 
 				}else{
 					// 管理外
-					miro.board.widgets.transformDelta(card, (posxOut+card.bounds.width/2+20)-card.x, (posyOut+card.bounds.height/2+20)-card.y)
-							.catch(error=> {
-								document.body.style.cursor = 'auto';
-								//miro.showNotification('ボードの初期化に失敗しました。');
-								errMessage.innerHTML = "ボードの初期化に失敗しました";
-								//closeWindow();
-							});
+//					miro.board.widgets.transformDelta(card, (posxOut+card.bounds.width/2+20)-card.x, (posyOut+card.bounds.height/2+20)-card.y)
+//							.catch(error=> {
+//								document.body.style.cursor = 'auto';
+//								//miro.showNotification('ボードの初期化に失敗しました。');
+//								errMessage.innerHTML = "ボードの初期化に失敗しました";
+//								//closeWindow();
+//							});
+
+					card.x = posxOut;
+					card.y = posyOut;
 
 					posxOut = xOut + (card.bounds.width + 20) * icolOut;
 				  
@@ -202,6 +209,8 @@
 			}
 				
         }
+        
+        await miro.bord.widgets.update(allCards);
 
 		document.body.style.cursor = 'auto';
 		errMessage.style.display='block';
