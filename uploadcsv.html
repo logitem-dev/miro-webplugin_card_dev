@@ -60,7 +60,7 @@
 
       // 出勤フラグでデータを振り分ける
       var listOn = await datas.filter(d=> d[attendIndex] === '1').map(d=> new Map([[d[idIndex], d[initialposIndex]]]));	// 社員ID、初期位置のMap
-console.log("listOn=" + listOn.get("1"));      
+console.log("listOn=" + listOn);      
       var listOff = await datas.filter(d=> d[attendIndex] === '0').map(d=> d[idIndex]);
       
       
