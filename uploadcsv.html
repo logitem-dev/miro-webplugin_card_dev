@@ -61,9 +61,8 @@
       // 出勤フラグでデータを振り分ける
       var listOn = new Map();
       await datas.filter(d=> d[attendIndex] === '1').forEach(d=> {
-      	listOn.set(d[attendIndex], d[initialposIndex]);
+      	listOn.set(d[idIndex], d[initialposIndex]);
       });
-console.log(listOn);      
       var listOff = await datas.filter(d=> d[attendIndex] === '0').map(d=> d[idIndex]);
       
       
