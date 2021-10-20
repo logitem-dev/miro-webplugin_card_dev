@@ -59,8 +59,11 @@
 //      let todayData = datas.filter(d=> d[dateIndex] == today);
 
       // 出勤フラグでデータを振り分ける
-      var listOn = await datas.filter(d=> d[attendIndex] === '1').map(d=> new Map([d[idIndex], d[initialposIndex]]));	// 社員ID、初期位置のMap
-console.log("listOn=" + listOn);      
+      var listOn = new Map();
+      await datas.filter(d=> d[attendIndex] === '1').forEach(d=> {
+      	listOn.set(d[attendIndex], d[initialposIndex]);
+      });
+console.log(listOn);      
       var listOff = await datas.filter(d=> d[attendIndex] === '0').map(d=> d[idIndex]);
       
       
