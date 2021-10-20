@@ -60,7 +60,7 @@
 
       // 出勤フラグでデータを振り分ける
       var listOn = await datas.filter(d=> d[attendIndex] === '1').map(d=> new Map([[d[idIndex], d[initialposIndex]]]));	// 社員ID、初期位置のMap
-console.log("listOn=" + listOn);      
+console.log("listOn=" + listOn.get("1"));      
       var listOff = await datas.filter(d=> d[attendIndex] === '0').map(d=> d[idIndex]);
       
       
@@ -131,6 +131,7 @@ console.log("listOn=" + listOn);
 		for (const [key, value] of listOnMap) {
 		  listOn.push(key);
 		}
+console.log("liston=" + listOn);		
 		
 		// 休暇者、管理外フレームの取得(出勤者、管理外はフレームは2021/10時点で一つのみ)
 		var frameOff = initFrames.filter(f=> f.name === "休暇者");
