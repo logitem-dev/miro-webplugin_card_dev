@@ -138,6 +138,9 @@ console.log("liston=" + listOn);
 		// 休暇者、管理外フレームの取得(出勤者、管理外はフレームは2021/10時点で一つのみ)
 		var frameOff = initFrames.filter(f=> f.name === "休暇者");
 		var frameOut = initFrames.filter(f=> f.name === "管理外");
+		
+		// 初期値が見つからなかった場合の出勤者フレーム
+		var frameOn = initFrames.filter(f=> f.name === "出勤者");
 
         // カードオブジェクトを出勤者・休暇者Frame上に移動
         //allCards.forEach(card => {
@@ -164,7 +167,11 @@ console.log("liston=" + listOn);
 					}
 					
 					var initFrame = initFrames.filter(f=> f.name.toUpperCase() === initFrameName.toUpperCase());
-
+					
+					if(initFrame === null){
+						initFrame = frameOn;
+					}
+					
 					// 出勤者
 					miro.board.widgets.transformDelta(card, (initFrame[0].posx+card.bounds.width/2+20)-card.x, (initFrame[0].posy+card.bounds.height/2+20)-card.y)
 							.catch(error=> {
