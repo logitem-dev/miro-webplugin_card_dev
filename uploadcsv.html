@@ -133,7 +133,6 @@
 		for (const [key, value] of listOnMap) {
 		  listOn.push(key);
 		}
-console.log("liston=" + listOn);		
 		
 		// 休暇者、管理外フレームの取得(出勤者、管理外はフレームは2021/10時点で一つのみ)
 		var frameOff = initFrames.filter(f=> f.name === "休暇者");
@@ -168,8 +167,9 @@ console.log("liston=" + listOn);
 					
 					var initFrame = initFrames.filter(f=> f.name.toUpperCase() === initFrameName.toUpperCase());
 					
-					if(initFrame === null){
-						initFrame = [frameOn];
+					// 該当する初期位置フレームが存在しない場合は出勤者フレームへ
+					if(initFrame.length === 0){
+						initFrame.push(frameOn);
 					}
 					
 					// 出勤者
