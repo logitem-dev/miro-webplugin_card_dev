@@ -138,9 +138,6 @@
 		var frameOff = initFrames.filter(f=> f.name === "休暇者");
 		var frameOut = initFrames.filter(f=> f.name === "管理外");
 		
-		// 初期値が見つからなかった場合の出勤者フレーム
-		var frameOn = initFrames.filter(f=> f.name === "出勤者");
-
         // カードオブジェクトを出勤者・休暇者Frame上に移動
         //allCards.forEach(card => {
 		for(let i=0; i< allCards.length; i++){
@@ -169,7 +166,7 @@
 					
 					// 該当する初期位置フレームが存在しない場合は出勤者フレームへ
 					if(initFrame.length === 0){
-						initFrame = [frameOn];
+						initFrame = initFrames.filter(f=> f.name === "出勤者");
 					}
 					
 					// 出勤者
