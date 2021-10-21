@@ -169,7 +169,7 @@ console.log("liston=" + listOn);
 					var initFrame = initFrames.filter(f=> f.name.toUpperCase() === initFrameName.toUpperCase());
 					
 					if(initFrame === null){
-						initFrame[0] = frameOn;
+						initFrame = [frameOn];
 					}
 					
 					// 出勤者
