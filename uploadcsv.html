@@ -77,12 +77,11 @@
 
 	  // Frame用のクラス    
       const frameclass = class{
-        constructor(name, x1, x2, y1, y2,row, col, posx, posy){
+        constructor(name, x1, x2, y, row, col, posx, posy){
           this.name = name;
           this.x1 = x1;
           this.x2 = x2;
-          this.y1 = y1;
-          this.y2 = y2;
+          this.y = y;
           this.row = row;
           this.col = col;
           this.posx = posx;
@@ -115,8 +114,7 @@
 			initFrames.push(new frameclass(frames[i].title,								// name
 								frames[i].x - (frames[i].width / 2),			// x1
 								frames[i].x + (frames[i].width / 2),			// x2
-								frames[i].y - (frames[i].height / 2),			// y1
-								frames[i].y + (frames[i].height / 2),			// y2
+								frames[i].y - (frames[i].height / 2),			// y
 								0,												// row
 								1,												// col
 								frames[i].x - (frames[i].width / 2),			// posx
@@ -140,22 +138,10 @@
 		var frameOff = initFrames.filter(f=> f.name === "休暇者");
 		var frameOut = initFrames.filter(f=> f.name === "管理外");
 		
-		// 管理外カードの配置位置を取得する
-		var outCardList = [];
-		var cardList = [];		// 対象カードリスト
-		var cardPos = [];		// 初期カード位置(戻り値用)
-		allCards.forEach(card => {
-			// 管理外のフレームに入っているカードを対象外とし、別リストへ保存する
-			if(card.x >= frameOut[0].x1 && card.x <= frameOut[0].x2 && card.y >= frameOut[0].y1 && card.y <= frameOut[0].y2){
-				outCardList.push(card);
-			}else{
-				cardList.push(card);
-			}
-		});
         // カードオブジェクトを出勤者・休暇者Frame上に移動
-        //cardList.forEach(card => {
-		for(let i=0; i< cardList.length; i++){
-			var card = cardList[i];
+        //allCards.forEach(card => {
+		for(let i=0; i< allCards.length; i++){
+			var card = allCards[i];
 				        
 			if(i >0 && i % 10 == 0){
 				await sleep(5000);
@@ -197,7 +183,7 @@
 					if(initFrame[0].posx + card.bounds.width > initFrame[0].x2 - 20){       // Frameの横幅を超ええる場合は改行
 						initFrame[0].posx = initFrame[0].x1;
 						initFrame[0].col = 1;
-						initFrame[0].posy = initFrame[0].y1 + ((card.bounds.height+20) * ++initFrame[0].row);
+						initFrame[0].posy = initFrame[0].y + (card.bounds.height * ++initFrame[0].row);
 					}else{
 						initFrame[0].col++;                
 					}
@@ -219,27 +205,13 @@
 					if(frameOff[0].posx + card.bounds.width > frameOff[0].x2 - 20){       // Frameの横幅を超ええる場合は改行
 						frameOff[0].posx = frameOff[0].x1;
 						frameOff[0].col = 1;
-						frameOff[0].posy = frameOff[0].y1 + ((card.bounds.height+20) * ++frameOff[0].row);
+						frameOff[0].posy = frameOff[0].y + (card.bounds.height * ++frameOff[0].row);
 					}else{
 						frameOff[0].col++; 
 					}
 
 				}else{
 					// 管理外
-					// 配置位置を設定
-					if(outCardList.length !== 0){
-						cardPos[0] = frameOut[0].posx;
-						cardPos[1] = frameOut[0].posy;
-						cardPos[2] = frameOut[0].col;
-						cardPos[3] = frameOut[0].row;
-					
-						getOutCardPosition(outCardList, frameOut[0].x1, frameOut[0].x2, frameOut[0].y1, cardPos);
-						frameOut[0].posx = cardPos[0];
-						frameOut[0].posy = cardPos[1];
-						frameOut[0].col = cardPos[2];
-						frameOut[0].row = cardPos[3];
-					}
-					
 					miro.board.widgets.transformDelta(card, (frameOut[0].posx+card.bounds.width/2+20)-card.x, (frameOut[0].posy+card.bounds.height/2+20)-card.y)
 							.catch(error=> {
 								document.body.style.cursor = 'auto';
@@ -253,7 +225,7 @@
 					if(frameOut[0].posx + card.bounds.width > frameOut[0].x2 - 20){       // Frameの横幅を超ええる場合は改行
 						frameOut[0].posx = frameOut[0].x1;
 						frameOut[0].col = 1;
-						frameOut[0].posy = frameOut[0].y1 + ((card.bounds.height+20) * ++frameOut[0].row);
+						frameOut[0].posy = frameOut[0].y + (card.bounds.height * ++frameOut[0].row);
 					}else{
 						frameOut[0].col++;
 					}
@@ -273,60 +245,6 @@
     function closeWindow(){
         miro.board.ui.closeModal();
     }
-    
-    // 管理外カード配置場所を取得する
-	async function getOutCardPosition(outCardList, frameX1, frameX2, frameY1, cardPos){
-
-		var posx = cardPos[0];
-		var posy = cardPos[1];
-        
-        var icolPos = cardPos[2];
-        var irowPos = cardPos[3];
-                        
-		while(true){
-
-			var posx2 = posx + outCardList[0].bounds.width;
-			var posy2 = posy + outCardList[0].bounds.height;			
-				
-			// カードが存在しない位置を探す
-			var cards = outCardList.filter(card => {
-				var cardx1 = card.x - card.bounds.width/2;
-				var cardx2 = card.x + card.bounds.width/2;
-				var cardy1 = card.y - card.bounds.height/2;
-				var cardy2 = card.y + card.bounds.height/2;
-				
-			if((cardx1 <= posx+20 && posx+20 <= cardx2 && cardy1 <= posy+20 && posy+20 <= cardy2) || 
-                (cardx1 <= posx2+20 && posx2+20 <= cardx2 && cardy1 <= posy2+20 && posy2+20 <= cardy2) || 
-                (cardx1 <= posx+20 && posx+20 <= cardx2 && cardy1 <= posy2+20 && posy2+20 <= cardy2) || 
-                (cardx1 <= posx2+20 && posx2+20 <= cardx2 && cardy1 <= posy+20 && posy+20 <= cardy2) ){
-					return true;
-				}else{
-					return false;
-				}
-			});
-			
-			if(cards.length === 0){
-				break;
-			}
-			
-			posx = frameX1 + (outCardList[0].bounds.width + 20) * icolPos;
-          
-			if(posx + outCardList[0].bounds.width > frameX2 - 20){       // Frameの横幅を超える場合は改行
-				posx = frameX1;
-				icolPos = 1;
-				posy = frameY1 + ((outCardList[0].bounds.height+20) * ++irowPos);
-			}else{
-				icolPos++;
-			}
-			
-		}
-		
-		cardPos[0] = posx;
-		cardPos[1] = posy;
-		cardPos[2] = icolPos;
-		cardPos[3] = irowPos;
-
-	}
 
 </script>
 </body>
