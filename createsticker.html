@@ -185,6 +185,7 @@
                 var staffid = fromjson[client_id]['staffid'];
                 var staffName = fromjson[client_id]['staffName'];
                 var workHour = fromjson[client_id]['working_hour'];
+                var restHour = fromjson[client_id]['rest_hour'];
                 var badge = fromjson[client_id]['badge'];
 
                 // 既存カードの値をセット
@@ -198,12 +199,24 @@
                         } else {
                             option.selected = false;
                         }
+                    }
+                    
+                var optionRestour = document.querySelectorAll("select[name=rest_hour] option");
+                    for(var option of optionRestour) {
+                        if(option.textContent === restHour) {
+                            option.selected = true;
+                        } else {
+                            option.selected = false;
+                        }
                     }                
+                    
                 document.getElementsByName("oldwidghtId")[0].value = images[0].id;
                 
                 // バッジの表示
                 if(badge!=null){
                 	for(var i=0;i<8;i++){
+console.log("badge"= + badge);
+console.log("val"= + 2**(i));
                 		if(badge & 2**(i) !== 0){
 			                document.getElementById("badge"+(i+1)).checked=true;
                 		}
@@ -532,6 +545,7 @@
 
             var emploeeName = document.getElementsByName("emploee_name")[0].value;
             var workingHour = document.getElementsByName("working_hour")[0].value;
+            var restHour = document.getElementsByName("rest_hour")[0].value;
             var badgeValue = document.getElementsByName("badgeValue")[0].value;
 
             var dataurl = document.getElementsByName('dataurl')[0].value;
@@ -555,11 +569,11 @@
                 var oldwidget = await miro.board.widgets.get({id: oldid});
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
-                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, badge:badgeValue}}});
+                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue}}});
 
             }else{            
             	
-            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, badge:badgeValue}}});
+            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue}}});
             	
             	// 新規作成位置へ移動
             	var posxArray = [];
