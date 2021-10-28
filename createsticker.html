@@ -104,7 +104,31 @@
 	                    <option value='21:00-6:00'>21:00-6:00</option>
 	                    
 	                    </select>
+				休憩時間  ：<select name="rest_hour" onchange="drawText(this.name, 130, 25, '')">
+			                    <option value='-'>-</option>
+			                    <option value='0'>0</option>
+			                    <option value='45'>45</option>
+			                    <option value='60'>60</option>
+			                </select>
 	        <br>
+	        
+			<div>
+				<span class="col-1"><input type="checkbox" id='badge1' onclick='showBadge(this.id, 1)'>フォークリフト</span>
+				<span class="col-1"><input type="checkbox" id='badge2' onclick='showBadge(this.id, 2)'>ハイピックランナー</span>
+			</div>
+			<div>
+				<span class="col-1"><input type="checkbox" id='badge3' onclick='showBadge(this.id, 3)'>ピッキオ</span>
+				<span class="col-1"><input type="checkbox" id='badge4' onclick='showBadge(this.id, 4)'>楽ノリ君</span>
+			</div>
+			<div>
+				<span class="col-1"><input type="checkbox" id='badge5' onclick='showBadge(this.id, 5)'>垂直輸送機</span>
+				<span class="col-1"><input type="checkbox" id='badge6' onclick='showBadge(this.id, 6)'>コンベヤメザニン</span>
+			</div>
+			<div>
+				<span class="col-1"><input type="checkbox" id='badge7' onclick='showBadge(this.id, 7)'>移動ラック</span>
+				<span class="col-1"><input type="checkbox" id='badge8' onclick='showBadge(this.id, 8)'>ドックトラベラー</span>
+			</div>
+	        
 
 		<input type='hidden' name='dataurl'>
 	    <input type='hidden' name='oldwidghtId'><br>
@@ -251,6 +275,32 @@
 	    
         
         },false);
+        
+        function showBadge(checkbox, badgeNumber){
+        
+            var checkboxobj = document.getElementById(checkbox);
+            
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+
+			var checkboxFunc;
+			
+			var xpos = 110 + 37*badgeNumber + 6;
+            
+            if(checkboxobj.checked){
+            	checkboxFunc = function(){context.drawImage(image,xpos,166, 15, 15)};
+            }else{
+                checkboxFunc = function(){clearPicture(context, xpos, 166, 15, 15)};
+            }
+            
+            var image = new Image();
+            image.src = './img/badge_' + badgeNumber + '.png';
+
+
+            image.addEventListener('load', checkboxFunc, false);
+        
+        
+        }
 
 		// 文字のバイト数取得(全角を2バイトとする)
 		function getBytes(value){
@@ -268,9 +318,14 @@
 
         // Canvas内に文字を表示する
         function drawText(name, ypos, fontsize, font){
-
-            var text = document.getElementsByName(name);
-
+			var text;
+			
+			if(name === "working_hour" || name === "rest_hour"){
+				text = 	document.getElementsByName("working_hour")[0].value + "(" + document.getElementsByName("rest_hour")[0].value + ")";
+			}else{
+				text = document.getElementsByName(name)[0].value;
+			}
+			
             var canvas = document.getElementById('canvas');
             var context = canvas.getContext('2d');
 
@@ -292,8 +347,7 @@
 			
 			}
        		clearText(context, x-282, ypos - yclearpos, height);           // 範囲クリア位置調整
-
-            context.fillText(text[0].value, x, y);
+            context.fillText(text, x, y);
         }
 
         // アップロード確定時にCanvasを合成する(編集用と確定用　編集用はクリア処理が入るため)
