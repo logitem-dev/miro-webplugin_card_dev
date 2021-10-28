@@ -204,6 +204,7 @@
                 // バッジの表示
                 if(badge!=null){
                 	for(var i=0;i<8;i++){
+console.log("badge"+(i+1));
                 		if(badge & 2**(i) !== 0){
 			                document.getElementsByName("badge"+(i+1))[0].checked=true;
                 		}
@@ -411,6 +412,7 @@
             const image1 = await getImagefromCanvas('canvas');
             ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
             
+            ctx = canvas.getContext("2d");
             const imagebadge = await getImagefromCanvas('canvasBadge');
             ctx.drawImage(imagebadge, 0, 0, canvas.width, canvas.height);
             
