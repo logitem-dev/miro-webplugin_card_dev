@@ -206,11 +206,10 @@
                 	for(var i=0;i<8;i++){
                 		if(badge & 2**(i) !== 0){
 			                document.getElementsByName("badge"+(i+1))[0].checked=true;
-                		};
+                		}
                 	}
                 }else{
                 	// バッジ表示欄の表示
-                	
 			        var imageBadge = new Image();
 			        imageBadge.src = './img/badge.png';
 			        imageBadge.onload = (function () {
@@ -224,7 +223,7 @@
 			            ctx.drawImage(imageBadge, 0, 0);
 			        });  
                 	
-                }
+                }n
                 
                 var loadimage = new Image();
                 await fetch(api_uri + 's3/' + staffid + '.png' , {
@@ -536,7 +535,7 @@
                 var oldwidget = await miro.board.widgets.get({id: oldid});
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
-                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, badge:badgeValue}});
+                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, badge:badgeValue}}});
 
             }else{            
             	
