@@ -216,8 +216,8 @@
                 if(badge!=null){
                 	for(var i=0;i<8;i++){
 console.log("badge=" + badge);
-console.log("val=" + badge & 2**(i));
-                		if(badge & 2**(i) !== 0){
+console.log("val=" + (2**(i)));
+                		if(badge & 2**(i) != 0){
 			                document.getElementById("badge"+(i+1)).checked=true;
                 		}
                 	}
