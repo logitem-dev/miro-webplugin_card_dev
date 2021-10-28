@@ -223,7 +223,7 @@
 			            ctx.drawImage(imageBadge, 0, 0);
 			        });  
                 	
-                }n
+                }
                 
                 var loadimage = new Image();
                 await fetch(api_uri + 's3/' + staffid + '.png' , {
@@ -274,7 +274,22 @@
             ctx.drawImage(image, 0, 0);
             // DataUrlをクリア
             document.getElementsByName('dataurl')[0].value = "";
+        });
+        
+    	// バッジ表示欄の表示
+        var imageBadge = new Image();
+        imageBadge.src = './img/badge.png';
+        imageBadge.onload = (function () {
+            //画像ロードが完了してからキャンバスの準備をする
+            var canvas = document.getElementById('canvasBadge');
+            var ctx = canvas.getContext('2d');
+            //キャンバスのサイズを画像サイズに合わせる
+                canvas.width = imageBadge.width;
+                canvas.height = imageBadge.height;
+            //キャンバスに画像を描画（開始位置0,0）
+            ctx.drawImage(imageBadge, 0, 0);
         });  
+        
     } 
 
         var obj1 = document.getElementsByName("selfile");
@@ -395,6 +410,10 @@
 
             const image1 = await getImagefromCanvas('canvas');
             ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
+            
+            const imagebadge = await getImagefromCanvas('canvasBadge');
+            ctx.drawImage(imagebadge, 0, 0, canvas.width, canvas.height);
+            
         }
 
         // Canvasオブジェクトからイメージを取得する
