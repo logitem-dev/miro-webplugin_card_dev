@@ -58,6 +58,7 @@
 	    <div class="canvas-wrapper">
 		<canvas id = "canvas2" width="446" height="200"></canvas>
 	 	<canvas id = "canvas" width="446" height="200"></canvas>
+	 	<canvas id = "canvasBadge" width="446" height="200"></canvas>
 
 	    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 35, 30, '')"><br>
 		作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 90, Math.min(555/getBytes(this.value), maxFont) , 'bold ')"><br>
@@ -128,6 +129,7 @@
 				<span class="col-1"><input type="checkbox" id='badge7' onclick='showBadge(this.id, 7)'>移動ラック</span>
 				<span class="col-1"><input type="checkbox" id='badge8' onclick='showBadge(this.id, 8)'>ドックトラベラー</span>
 			</div>
+			<input type='hidden' name='badgeValue'>
 	        
 
 		<input type='hidden' name='dataurl'>
@@ -183,6 +185,7 @@
                 var staffid = fromjson[client_id]['staffid'];
                 var staffName = fromjson[client_id]['staffName'];
                 var workHour = fromjson[client_id]['working_hour'];
+                var badge = fromjson[client_id]['badge'];
 
                 // 既存カードの値をセット
                 document.getElementsByName("emploee_id")[0].value = staffid;
@@ -197,6 +200,31 @@
                         }
                     }                
                 document.getElementsByName("oldwidghtId")[0].value = images[0].id;
+                
+                // バッジの表示
+                if(badge!=null){
+                	for(var i=0;i<8;i++){
+                		if(badge & 2**(i) !== 0){
+			                document.getElementsByName("badge"+(i+1))[0].checked=true;
+                		};
+                	}
+                }else{
+                	// バッジ表示欄の表示
+                	
+			        var imageBadge = new Image();
+			        imageBadge.src = './img/badge.png';
+			        imageBadge.onload = (function () {
+			            //画像ロードが完了してからキャンバスの準備をする
+			            var canvas = document.getElementById('canvasBadge');
+			            var ctx = canvas.getContext('2d');
+			            //キャンバスのサイズを画像サイズに合わせる
+			                canvas.width = imageBadge.width;
+			                canvas.height = imageBadge.height;
+			            //キャンバスに画像を描画（開始位置0,0）
+			            ctx.drawImage(imageBadge, 0, 0);
+			        });  
+                	
+                }
                 
                 var loadimage = new Image();
                 await fetch(api_uri + 's3/' + staffid + '.png' , {
@@ -284,18 +312,29 @@
             var context = canvas.getContext('2d');
 
 			var checkboxFunc;
+
+			// バッジの選択状況をビットで保持
+            var badgeValue = document.getElementsByName("badgeValue")[0].value;
+            
+            if(badgeValue==null){
+            	badgeValue = 0;
+            }
 			
 			var xpos = 110 + 37*badgeNumber + 6;
             
             if(checkboxobj.checked){
             	checkboxFunc = function(){context.drawImage(image,xpos,166, 15, 15)};
+            	badgeValue = badgeValue | 2**(badgeNumber-1);
             }else{
                 checkboxFunc = function(){clearPicture(context, xpos, 166, 15, 15)};
+                badgeValue = badgeValue & (~(2**(badgeNumber-1)));
             }
             
             var image = new Image();
             image.src = './img/badge_' + badgeNumber + '.png';
 
+			// バッジの選択状況を保持
+            document.getElementsByName("badgeValue")[0].value = badgeValue;
 
             image.addEventListener('load', checkboxFunc, false);
         
@@ -474,6 +513,7 @@
 
             var emploeeName = document.getElementsByName("emploee_name")[0].value;
             var workingHour = document.getElementsByName("working_hour")[0].value;
+            var badgeValue = document.getElementsByName("badgeValue")[0].value;
 
             var dataurl = document.getElementsByName('dataurl')[0].value;
 
@@ -496,11 +536,11 @@
                 var oldwidget = await miro.board.widgets.get({id: oldid});
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
-                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, badge:badgeValue}});
 
             }else{            
             	
-            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, badge:badgeValue}}});
             	
             	// 新規作成位置へ移動
             	var posxArray = [];
