@@ -214,14 +214,14 @@
                 
                 // バッジの表示
                 if(badge!=null){
+					document.getElementsByName("badgeValue")[0].value = badge;
                 	for(var i=0;i<8;i++){
-console.log("badge=" + badge);
-console.log("val=" + (2**(i)));
-                		if(badge & 2**(i) != 0){
+                		if((badge & 2**(i)) != 0){
 			                document.getElementById("badge"+(i+1)).checked=true;
                 		}
                 	}
                 }else{
+					document.getElementsByName("badgeValue")[0].value = "0";
                 	// バッジ表示欄の表示
 			        var imageBadge = new Image();
 			        imageBadge.src = './img/badge.png';
