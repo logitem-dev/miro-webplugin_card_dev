@@ -422,11 +422,11 @@
             var ctx = canvas.getContext("2d");
 
             const image1 = await getImagefromCanvas('canvas');
-            ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
+            await ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
             
             ctx = canvas.getContext("2d");
             const imagebadge = await getImagefromCanvas('canvasBadge');
-            ctx.drawImage(imagebadge, 0, 0, canvas.width, canvas.height);
+            await ctx.drawImage(imagebadge, 0, 0, canvas.width, canvas.height);
             
         }
 
