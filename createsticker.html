@@ -419,12 +419,12 @@
         // アップロード確定時にCanvasを合成する(編集用と確定用　編集用はクリア処理が入るため)
         async function concatCanvas(){
             var canvas = document.getElementById('canvas2');
-            var ctx = canvas.getContext("2d");
+            var ctx = await canvas.getContext("2d");
 
             const image1 = await getImagefromCanvas('canvas');
             await ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
             
-            ctx = canvas.getContext("2d");
+            ctx = await canvas.getContext("2d");
             const imagebadge = await getImagefromCanvas('canvasBadge');
             await ctx.drawImage(imagebadge, 0, 0, canvas.width, canvas.height);
             
