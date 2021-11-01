@@ -143,8 +143,8 @@
 		for(let i=0; i< allCards.length; i++){
 			var card = allCards[i];
 				        
-			if(i >0 && i % 5 == 0){
-				await sleep(5000);
+			if(i >0 && i % 10 == 0){
+				await sleep(10000);
 			}
         
 			var tojson = JSON.stringify(card.metadata);
