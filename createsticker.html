@@ -276,7 +276,7 @@
         // 初期画像(テキスト等なし)
         var image = new Image();
         image.src = './img/white.png';
-        image.onload = (function () {
+        image.onload = (async function () {
             //画像ロードが完了してからキャンバスの準備をする
             var canvas = document.getElementById('canvas2');
             var ctx = canvas.getContext('2d');
@@ -292,7 +292,7 @@
     	// バッジ表示欄の表示
         var imageBadge = new Image();
         imageBadge.src = './img/badge.png';
-        imageBadge.onload = (function () {
+        imageBadge.onload = (async function () {
             //画像ロードが完了してからキャンバスの準備をする
             var canvas = document.getElementById('canvasBadge');
             var ctx = canvas.getContext('2d');
