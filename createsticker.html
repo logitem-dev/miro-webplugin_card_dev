@@ -276,7 +276,7 @@
         // 初期画像(テキスト等なし)
         var image = new Image();
         image.src = './img/white.png';
-        image.onload = (async function () {
+        image.onload = (function () {
             //画像ロードが完了してからキャンバスの準備をする
             var canvas = document.getElementById('canvas2');
             var ctx = canvas.getContext('2d');
@@ -286,13 +286,13 @@
             //キャンバスに画像を描画（開始位置0,0）
             ctx.drawImage(image, 0, 0);
             // DataUrlをクリア
-            await document.getElementsByName('dataurl')[0].value = "";
+            document.getElementsByName('dataurl')[0].value = "";
         });
         
     	// バッジ表示欄の表示
         var imageBadge = new Image();
         imageBadge.src = './img/badge.png';
-        imageBadge.onload = (async function () {
+        imageBadge.onload = (function () {
             //画像ロードが完了してからキャンバスの準備をする
             var canvas = document.getElementById('canvasBadge');
             var ctx = canvas.getContext('2d');
@@ -301,7 +301,7 @@
                 canvas.height = imageBadge.height;
             //キャンバスに画像を描画（開始位置0,0）
             ctx.drawImage(imageBadge, 0, 0);
-			await document.getElementsByName('dataurl')[0].value = "";
+			document.getElementsByName('dataurl')[0].value = "";
         });  
         
     } 
