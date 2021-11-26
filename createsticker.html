@@ -208,7 +208,7 @@
             if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
 
                 document.getElementsByName("copy")[0].disabled=false;
-                document.getElementsByName("cardcolor")[0].disabled=true;
+                document.getElementById("cardcolor").disabled=true;
 
                 var staffid = fromjson[client_id]['staffid'];
                 var staffName = fromjson[client_id]['staffName'];
