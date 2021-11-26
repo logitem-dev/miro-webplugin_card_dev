@@ -114,10 +114,10 @@
 	        <br>
 
 			背景色　 ：<select id="cardcolor" onchange='changeCardImage(this.value)'>
-				<option value="white" style="background-color:#FFFFF2">　　　　</option>
-				<option value="red" style="background-color:#FFB0B0">　　　　</option>
-				<option value="green" style="background-color:#EDF9C8">　　　　</option>
-				<option value="blue" style="background-color:#DDFFFF">　　　　</option>
+				<option value="white" style="background-color:#FFFFF2">　　白　　</option>
+				<option value="red" style="background-color:#FFB0B0">　　赤　　</option>
+				<option value="green" style="background-color:#EDF9C8">　　緑　　</option>
+				<option value="blue" style="background-color:#DDFFFF">　　青　　</option>
 			</select></br>
 	        
 			<div>
@@ -208,6 +208,7 @@
             if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
 
                 document.getElementsByName("copy")[0].disabled=false;
+                document.getElementsByName("cardcolor")[0].disabled=true;
 
                 var staffid = fromjson[client_id]['staffid'];
                 var staffName = fromjson[client_id]['staffName'];
