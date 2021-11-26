@@ -112,6 +112,13 @@
 			                    <option value='60'>60</option>
 			                </select>
 	        <br>
+
+			背景色　 ：<select id="cardcolor" onchange='changeCardImage(this.value)'>
+				<option value="white" style="background-color:#FFFFF2">　　　　</option>
+				<option value="red" style="background-color:#FFB0B0">　　　　</option>
+				<option value="green" style="background-color:#EDF9C8">　　　　</option>
+				<option value="blue" style="background-color:#DDFFFF">　　　　</option>
+			</select></br>
 	        
 			<div>
 				<span class="col-1"><input type="checkbox" id='badge1' onclick='showBadge(this.id, 1)'>フォークリフト</span>
@@ -163,6 +170,26 @@
 	
 		loadImage();
 //		loadImageBatch();
+	}
+	
+	function changeCardImage(color){
+		if(color==""){ return };
+        var image = new Image();
+        image.src = './img/' + color + '.png';
+
+        image.onload = (function () {
+            //画像ロードが完了してからキャンバスの準備をする
+            var canvas = document.getElementById('canvas2');
+            var ctx = canvas.getContext('2d');
+            //キャンバスのサイズを画像サイズに合わせる
+                canvas.width = image.width;
+                canvas.height = image.height;
+            //キャンバスに画像を描画（開始位置0,0）
+            ctx.drawImage(image, 0, 0);
+            // DataUrlをクリア
+            document.getElementsByName('dataurl')[0].value = "";
+		});
+	
 	}
 
     miro.onReady(() => {
@@ -733,7 +760,7 @@
 							break;
 
 						default:
-							cardName = "sticker";
+							cardName = "white";
 							break;
 							
 					}
