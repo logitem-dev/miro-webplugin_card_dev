@@ -34,6 +34,10 @@
 	#tab2:checked ~ .tab_area .tab2_label{background:#D7EEFF; color:#000;}
 	#tab2:checked ~ .panel_area #panel2{display:block;}
 	
+	.col-1 {
+	    display: inline-block;
+	    width: 180px;
+	}	
      </style>
 </head>
     
@@ -56,8 +60,8 @@
 	    <input type="file" name="selfile" accept='.jpg' required><br>
 
 	    <div class="canvas-wrapper">
-		<canvas id = "canvas2" width="446" height="200"></canvas>
-	 	<canvas id = "canvas" width="446" height="200"></canvas>
+		<canvas id = "canvasBase" width="446" height="200"></canvas>
+	 	<canvas id = "canvasEdit" width="446" height="200"></canvas>
 	 	<canvas id = "canvasBadge" width="446" height="200"></canvas>
 
 	    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 35, 30, '')"><br>
@@ -113,7 +117,7 @@
 			                </select>
 	        <br>
 
-			背景色　 ：<select name="cardColor" onchange='changeCardImage(this.value)'>
+			背景色　 ：<select name="card_color" onchange='changeCardImage(this.value)'>
 						<option value="white" style="background-color:#FFFFF2">　　白　　</option>
 						<option value="red" style="background-color:#FFB0B0">　　赤　　</option>
 						<option value="green" style="background-color:#EDF9C8">　　緑　　</option>
@@ -169,7 +173,7 @@
 <script>
 
 	function onLoadFunc(){
-        var cardColor = document.getElementsByName("cardColor")[0].value;
+        var cardColor = document.getElementsByName("card_color")[0].value;
 		loadImage(cardColor);
 //		loadImageBatch();
 	}
@@ -181,7 +185,7 @@
 
         image.onload = (function () {
             //画像ロードが完了してからキャンバスの準備をする
-            var canvas = document.getElementById('canvas2');
+            var canvas = document.getElementById('canvasBase');
             var ctx = canvas.getContext('2d');
             //キャンバスのサイズを画像サイズに合わせる
                 canvas.width = image.width;
@@ -210,13 +214,14 @@
             if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
 
                 document.getElementsByName("copy")[0].disabled=false;
-                document.getElementsByName("cardColor")[0].disabled=true;
+                document.getElementsByName("card_color")[0].disabled=true;
 
                 var staffid = fromjson[client_id]['staffid'];
                 var staffName = fromjson[client_id]['staffName'];
                 var workHour = fromjson[client_id]['working_hour'];
                 var restHour = fromjson[client_id]['rest_hour'];
                 var badge = fromjson[client_id]['badge'];
+                var cardColor = fromjson[client_id]['card_color'];
 
                 // 既存カードの値をセット
                 document.getElementsByName("emploee_id")[0].value = staffid;
@@ -239,6 +244,15 @@
                             option.selected = false;
                         }
                     }                
+                    
+                var optionCardColor = document.querySelectorAll("select[name=card_color] option");
+                    for(var option of optionCardColor) {
+                        if(option.textContent === cardColor) {
+                            option.selected = true;
+                        } else {
+                            option.selected = false;
+                        }
+                    }
                     
                 document.getElementsByName("oldwidghtId")[0].value = images[0].id;
                 
@@ -284,7 +298,7 @@
 
                 loadimage.onload = (function () {
                     //画像ロードが完了してからキャンバスの準備をする
-                    var canvas = document.getElementById('canvas');
+                    var canvas = document.getElementById('canvasEdit');
                     var ctx = canvas.getContext('2d');
                     //キャンバスのサイズを画像サイズに合わせる
                     canvas.width = loadimage.width;
@@ -308,7 +322,7 @@
         image.src = './img/' + cardColor + '.png';
         image.onload = (function () {
             //画像ロードが完了してからキャンバスの準備をする
-            var canvas = document.getElementById('canvas2');
+            var canvas = document.getElementById('canvasBase');
             var ctx = canvas.getContext('2d');
             //キャンバスのサイズを画像サイズに合わせる
                 canvas.width = image.width;
@@ -341,7 +355,7 @@
         //ダイアログでファイル選択時にCanvas内に画像を表示する
         obj1[0].addEventListener("change",function(evt){
 
-            var canvas = document.getElementById('canvas');
+            var canvas = document.getElementById('canvasEdit');
             var context = canvas.getContext('2d');
 
             var imagefile = evt.target.files[0];
@@ -366,7 +380,7 @@
         
             var checkboxobj = document.getElementById(checkbox);
             
-            var canvas = document.getElementById('canvas');
+            var canvas = document.getElementById('canvasBadge');
             var context = canvas.getContext('2d');
 
 			var checkboxFunc;
@@ -423,7 +437,7 @@
 				text = document.getElementsByName(name)[0].value;
 			}
 			
-            var canvas = document.getElementById('canvas');
+            var canvas = document.getElementById('canvasEdit');
             var context = canvas.getContext('2d');
 
             context.font = font + fontsize + 'px Vardana';
@@ -449,10 +463,10 @@
 
         // アップロード確定時にCanvasを合成する(編集用と確定用　編集用はクリア処理が入るため)
         async function concatCanvas(){
-            var canvas = await document.getElementById('canvas2');
+            var canvas = await document.getElementById('canvasBase');
             var ctx = await canvas.getContext("2d");
 
-            const image1 = await getImagefromCanvas('canvas');
+            const image1 = await getImagefromCanvas('canvasEdit');
             await ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
             
             ctx = await canvas.getContext("2d");
@@ -563,11 +577,11 @@
         async function createWidget(emploeeId, oldid){
 
 	        // アップロード前に一旦送信用画像情報をクリア
-			var cardColor = document.getElementsByName("cardColor")[0].value;
+			var cardColor = document.getElementsByName("card_color")[0].value;
 	        await loadImage(cardColor);
 		    await concatCanvas();
 
-	    	document.getElementsByName('dataurl')[0].value = await document.getElementById('canvas2').toDataURL();
+	    	document.getElementsByName('dataurl')[0].value = await document.getElementById('canvasBase').toDataURL();
 
             setTimeout(function(){
                 if(document.getElementsByName('dataurl')[0].value === ""){
@@ -579,7 +593,7 @@
             var workingHour = document.getElementsByName("working_hour")[0].value;
             var restHour = document.getElementsByName("rest_hour")[0].value;
             var badgeValue = document.getElementsByName("badgeValue")[0].value;
-			var cardColor = document.getElementsByName("cardColor")[0].value;
+			var cardColor = document.getElementsByName("card_color")[0].value;
 
             var dataurl = document.getElementsByName('dataurl')[0].value;
 
@@ -602,11 +616,11 @@
                 var oldwidget = await miro.board.widgets.get({id: oldid});
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
-                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue, cardColor:cardColor}}});
+                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue, card_color:cardColor}}});
 
             }else{            
             	
-            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue, cardColor:cardColor}}});
+            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue, card_color:cardColor}}});
             	
             	// 新規作成位置へ移動
             	var posxArray = [];
@@ -869,7 +883,7 @@
 			}
 			                
 	        // Widgetの作成
-	        newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, cardColor:cardColor}}});
+	        newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, card_color:cardColor}}});
 
 	        
 	        // 一時ファイルの削除
