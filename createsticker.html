@@ -274,16 +274,7 @@
                 	// バッジ表示欄の表示
 			        var imageBadge = new Image();
 			        imageBadge.src = './img/badge.png';
-			        imageBadge.onload = (function () {
-			            //画像ロードが完了してからキャンバスの準備をする
-			            var canvas = document.getElementById('canvasBadge');
-			            var ctx = canvas.getContext('2d');
-			            //キャンバスのサイズを画像サイズに合わせる
-			                canvas.width = imageBadge.width;
-			                canvas.height = imageBadge.height;
-			            //キャンバスに画像を描画（開始位置0,0）
-			            ctx.drawImage(imageBadge, 0, 0);
-			        });  
+			        imageBadge.onload = getBadgeImageFunc();
                 	
                 }
                 
@@ -317,9 +308,26 @@
             }
         }else{
 			loadImage('white');			// デフォルトのカラー(白)
+        	// バッジ表示欄の表示
+	        var imageBadge = new Image();
+	        imageBadge.src = './img/badge.png';
+	        imageBadge.onload = getBadgeImageFunc();
         }
 
     }
+    
+    function getBadgeImageFunc(){    
+		return function () {
+            //画像ロードが完了してからキャンバスの準備をする
+            var canvas = document.getElementById('canvasBadge');
+            var ctx = canvas.getContext('2d');
+            //キャンバスのサイズを画像サイズに合わせる
+                canvas.width = imageBadge.width;
+                canvas.height = imageBadge.height;
+            //キャンバスに画像を描画（開始位置0,0）
+            ctx.drawImage(imageBadge, 0, 0);
+	    }
+	}
 
     async function loadImage(cardColor){
         //画像を読み込んでImageオブジェクトを作成する
