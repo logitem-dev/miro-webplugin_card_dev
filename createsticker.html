@@ -407,7 +407,12 @@
             	checkboxFunc = function(){context.drawImage(image,xpos,166, 15, 15)};
             	badgeValue = badgeValue | 2**(badgeNumber-1);
             }else{
-                checkboxFunc = function(){clearPicture(context, xpos, 166, 15, 15)};
+                checkboxFunc = function(){
+	                context.beginPath();
+	                context.rect(xpos, 166, 15, 15);
+	                context.fillStyle = '#FFFFF2';
+                	context.fill();
+                };
                 badgeValue = badgeValue & (~(2**(badgeNumber-1)));
             }
             
