@@ -173,8 +173,8 @@
 <script>
 
 	function onLoadFunc(){
-        var cardColor = document.getElementsByName("card_color")[0].value;
-		loadImage(cardColor);
+//        var cardColor = document.getElementsByName("card_color")[0].value;
+//		loadImage(cardColor);
 //		loadImageBatch();
 	}
 	
@@ -222,6 +222,12 @@
                 var restHour = fromjson[client_id]['rest_hour'];
                 var badge = fromjson[client_id]['badge'];
                 var cardColor = fromjson[client_id]['card_color'];
+                if(cardColor == null){
+                	cardColor = 'white';
+                }
+                
+		loadImage(cardColor);
+                
 
                 // 既存カードの値をセット
                 document.getElementsByName("emploee_id")[0].value = staffid;
