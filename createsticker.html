@@ -226,9 +226,8 @@
                 	cardColor = 'white';
                 }
                 
-		loadImage(cardColor);
+				loadImage(cardColor);
                 
-
                 // 既存カードの値をセット
                 document.getElementsByName("emploee_id")[0].value = staffid;
                 document.getElementsByName("emploee_name")[0].value = staffName;
@@ -316,7 +315,9 @@
                 });
 
             }
-        }	       
+        }else{
+			loadImage('white');			// デフォルトのカラー(白)
+        }
 
     }
 
@@ -469,15 +470,15 @@
 
         // アップロード確定時にCanvasを合成する(編集用と確定用　編集用はクリア処理が入るため)
         async function concatCanvas(){
-            var canvas = await document.getElementById('canvasBase');
-            var ctx = await canvas.getContext("2d");
+            const canvas = await document.getElementById('canvasBase');
+            const ctx = await canvas.getContext("2d");
 
-            const image1 = await getImagefromCanvas('canvasEdit');
-            await ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
+            const image = await getImagefromCanvas('canvasEdit');
+            await ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
             
-            ctx = await canvas.getContext("2d");
+            const ctxBase = await canvas.getContext("2d");
             const imagebadge = await getImagefromCanvas('canvasBadge');
-            await ctx.drawImage(imagebadge, 0, 0, canvas.width, canvas.height);
+            await ctxBase.drawImage(imagebadge, 0, 0, canvas.width, canvas.height);
             
         }
 
