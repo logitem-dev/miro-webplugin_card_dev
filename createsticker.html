@@ -61,8 +61,8 @@
 
 	    <div class="canvas-wrapper">
 		<canvas id = "canvasBase" width="446" height="200"></canvas>
-	 	<canvas id = "canvasBadge" width="446" height="200"></canvas>
 	 	<canvas id = "canvasEdit" width="446" height="200"></canvas>
+	 	<canvas id = "canvasBadge" width="446" height="200"></canvas>
 
 	    作業スタッフ番号：<input type='text' name="emploee_id" onchange="drawText(this.name, 35, 30, '')"><br>
 		作業スタッフ氏名：<input type='text' name="emploee_name" onchange="drawText(this.name, 90, Math.min(555/getBytes(this.value), maxFont) , 'bold ')"><br>
@@ -387,7 +387,7 @@
         
             var checkboxobj = document.getElementById(checkbox);
             
-            var canvas = document.getElementById('canvasEdit');
+            var canvas = document.getElementById('canvasBadge');
             var context = canvas.getContext('2d');
 
 			var checkboxFunc;
@@ -470,6 +470,7 @@
 
         // アップロード確定時にCanvasを合成する(編集用と確定用　編集用はクリア処理が入るため)
         async function concatCanvas(){
+        /*
             const canvas = await document.getElementById('canvasBase');
             const ctx = await canvas.getContext("2d");
             
@@ -479,6 +480,18 @@
             const ctx2 = await canvas.getContext("2d");
             const image = await getImagefromCanvas('canvasEdit');
             await ctx2.drawImage(image, 0, 0, canvas.width, canvas.height);
+		*/
+		
+            const canvasEdit = await document.getElementById('canvasEdit');
+            const ctxEdit = await canvasEdit.getContext("2d");
+            
+            const imagebadge = await getImagefromCanvas('canvasBadge');
+            await ctxEdit.drawImage(imagebadge, 0, 0, canvasEdit.width, canvasEdit.height);
+            
+            const canvasBase = await document.getElementById('canvasBase');
+            const ctxBase = await canvasBase.getContext("2d");
+            const image = await getImagefromCanvas('canvasEdit');
+            await ctxBase.drawImage(image, 0, 0, canvasBase.width, canvasBase.height);		
             
             
         }
