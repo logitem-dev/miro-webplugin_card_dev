@@ -113,12 +113,14 @@
 			                </select>
 	        <br>
 
-			背景色　 ：<select id="cardcolor" onchange='changeCardImage(this.value)'>
-				<option value="white" style="background-color:#FFFFF2">　　白　　</option>
-				<option value="red" style="background-color:#FFB0B0">　　赤　　</option>
-				<option value="green" style="background-color:#EDF9C8">　　緑　　</option>
-				<option value="blue" style="background-color:#DDFFFF">　　青　　</option>
-			</select></br>
+			背景色　 ：<select name="cardColor" onchange='changeCardImage(this.value)'>
+						<option value="white" style="background-color:#FFFFF2">　　白　　</option>
+						<option value="red" style="background-color:#FFB0B0">　　赤　　</option>
+						<option value="green" style="background-color:#EDF9C8">　　緑　　</option>
+						<option value="blue" style="background-color:#DDFFFF">　　青　　</option>
+						<option value="yellow" style="background-color:#FEFBBE">　　黄　　</option>
+						<option value="grey" style="background-color:#E5E5E5">　　灰　　</option>
+			     	</select></br>
 	        
 			<div>
 				<span class="col-1"><input type="checkbox" id='badge1' onclick='showBadge(this.id, 1)'>フォークリフト</span>
@@ -167,8 +169,8 @@
 <script>
 
 	function onLoadFunc(){
-	
-		loadImage('white');
+        var cardColor = document.getElementsByName("cardColor")[0].value;
+		loadImage(cardColor);
 //		loadImageBatch();
 	}
 	
@@ -208,7 +210,7 @@
             if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
 
                 document.getElementsByName("copy")[0].disabled=false;
-                document.getElementById("cardcolor").disabled=true;
+                document.getElementsByName("cardColor")[0].disabled=true;
 
                 var staffid = fromjson[client_id]['staffid'];
                 var staffName = fromjson[client_id]['staffName'];
@@ -298,12 +300,12 @@
 
     }
 
-    async function loadImage(cardName){
+    async function loadImage(cardColor){
         //画像を読み込んでImageオブジェクトを作成する
 
         // 初期画像(テキスト等なし)
         var image = new Image();
-        image.src = './img/' + cardName + '.png';
+        image.src = './img/' + cardColor + '.png';
         image.onload = (function () {
             //画像ロードが完了してからキャンバスの準備をする
             var canvas = document.getElementById('canvas2');
@@ -561,8 +563,8 @@
         async function createWidget(emploeeId, oldid){
 
 	        // アップロード前に一旦送信用画像情報をクリア
-	        var cardName = document.getElementById("cardcolor").value;
-	        await loadImage(cardName);
+			var cardColor = document.getElementsByName("cardColor")[0].value;
+	        await loadImage(cardColor);
 		    await concatCanvas();
 
 	    	document.getElementsByName('dataurl')[0].value = await document.getElementById('canvas2').toDataURL();
@@ -577,6 +579,7 @@
             var workingHour = document.getElementsByName("working_hour")[0].value;
             var restHour = document.getElementsByName("rest_hour")[0].value;
             var badgeValue = document.getElementsByName("badgeValue")[0].value;
+			var cardColor = document.getElementsByName("cardColor")[0].value;
 
             var dataurl = document.getElementsByName('dataurl')[0].value;
 
@@ -599,11 +602,11 @@
                 var oldwidget = await miro.board.widgets.get({id: oldid});
                 await miro.board.widgets.deleteById(oldwidget[0].id);
                 // Widgetの作成
-                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue}}});
+                await miro.board.widgets.create({ type: 'image', x: oldwidget[0].x, y: oldwidget[0].y, scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue, cardColor:cardColor}}});
 
             }else{            
             	
-            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue}}});
+            	var newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, rest_hour:restHour, badge:badgeValue, cardColor:cardColor}}});
             	
             	// 新規作成位置へ移動
             	var posxArray = [];
@@ -662,8 +665,8 @@
 		/*************************
 		/ ↓一括登録用のFunction        
 		**************************/
-		async function loadImageBatch(cardName) {
-			const res = await imageOnLoad(cardName).catch(e => {
+		async function loadImageBatch(cardColor) {
+			const res = await imageOnLoad(cardColor).catch(e => {
 				console.log('onload error', e);
 			});
 			//画像ロードが完了してからキャンバスの準備をする
@@ -679,12 +682,12 @@
 		}
 
 		
-		function imageOnLoad(cardName) {
+		function imageOnLoad(cardColor) {
 		  return new Promise((resolve, reject) => {
 		    const img = new Image();
 		    img.onload = () => resolve(img);
 		    img.onerror = (e) => reject(e);
-		    img.src = './img/' + cardName + '.png';
+		    img.src = './img/' + cardColor + '.png';
 		  });
 		}
 
@@ -747,33 +750,33 @@
 				if(d[0].length > 0){
 				
 					// 会社ごとにカードの色を変更
-					var cardName = "sticker";
+					var cardColor = "grey";
 					switch (d[companyIndex]){
 						case "バイトレ":
-							cardName = "green";
+							cardColor = "yellow";
 							break;
 							
 						case "フルキャスト":
-							cardName = "red";
+							cardColor = "red";
 							break;
 							
 						case "ヒロスタッフ":
-							cardName = "blue";
+							cardColor = "blue";
 							break;
 
 						default:
-							cardName = "white";
+							cardColor = "grey";
 							break;
 							
 					}
-					await loadImageBatch(cardName);
+					await loadImageBatch(cardColor);
 				
 					var workinghour = d[timeFromIndex] + "-" + d[timeToIndex];
 					await drawTextBatch("emploee_id", d[companyIndex] + " " + staffId, 35, 30, '');											// 会社記号＋スタッフ番号
 					await drawTextBatch("emploee_name", d[nameIndex], 90, Math.min(555/getBytes(d[nameIndex]), maxFont), 'bold ');			// スタッフ氏名
 					await drawTextBatch("working_hour", workinghour , 130, 25, '');
 					
-					var newcard = await createWidgetsBatch(staffId, d[nameIndex], workinghour, oldWidgetId);
+					var newcard = await createWidgetsBatch(staffId, d[nameIndex], workinghour, oldWidgetId, cardColor);
 					addedCards.push(newcard[0]);
 					
 				}
@@ -833,7 +836,7 @@
 
 		
 	    // Widgetを作成して画面を閉じる
-	    async function createWidgetsBatch(emploeeId, emploeeName, workingHour, oldWidgetId){
+	    async function createWidgetsBatch(emploeeId, emploeeName, workingHour, oldWidgetId, cardColor){
 	    
 	    	document.getElementsByName('dataurlBatch')[0].value = await document.getElementById('canvasBatch').toDataURL();
 
@@ -866,7 +869,7 @@
 			}
 			                
 	        // Widgetの作成
-	        newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour}}});
+	        newcard = await miro.board.widgets.create({ type: 'image', scale: 2.5, url: api_uri + emploeeId + '.png', metadata:{[client_id] :{staffid: emploeeId, staffName: emploeeName, working_hour: workingHour, cardColor:cardColor}}});
 
 	        
 	        // 一時ファイルの削除
