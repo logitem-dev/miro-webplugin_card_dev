@@ -451,6 +451,32 @@
 			
 			if(name === "working_hour" || name === "rest_hour"){
 				text = 	document.getElementsByName("working_hour")[0].value + "(" + document.getElementsByName("rest_hour")[0].value + ")";
+			}else if(name === "emploee_id"){
+				var cardColor = document.getElementsByName("card_color")[0].value;
+				var companyName = "";
+				switch (cardColor){
+					case "yellow":
+						companyName = "バイトレ ";
+						break;
+						
+					case "red":
+						companyName = "フルキャスト";
+						break;
+						
+					case "blue":
+						companyName = "ヒロスタッフ";
+						break;
+						
+					case "white":
+						companyName = "";
+
+					default:
+						companyName = "";
+						break;
+						
+				}
+				text = companyName + document.getElementsByName(name)[0].value;
+				
 			}else{
 				text = document.getElementsByName(name)[0].value;
 			}
