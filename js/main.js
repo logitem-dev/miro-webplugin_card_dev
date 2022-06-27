@@ -15,13 +15,36 @@ miro.onReady(() => {
         },
       },
       toolbar: {
-        title: '勤怠CSVｱｯﾌﾟﾛｰﾄﾞ',
-        toolbarSvgIcon: iconUpdCSV, 
-        librarySvgIcon: iconUpdCSV,
+        title: 'カード変換',
+        toolbarSvgIcon: '<circle cx="12" cy="12" r="9" fill="none" fill-rule="evenodd" stroke="currentColor" stroke-width="2"/>', 
+        librarySvgIcon: '<circle cx="12" cy="12" r="9" fill="none" fill-rule="evenodd" stroke="currentColor" stroke-width="2"/>',
         positionPriority: 1,
         onClick: async () => {
 
-			    await miro.board.ui.openModal('uploadAttendCsv.html', { width: 300, height: 200 });
+          // 全イメージオブジェクトの取得
+          var allCards = await miro.board.widgets.get({type: 'IMAGE'});
+          
+          allCards.forEach(card => {
+            var areaName = "";
+
+            var tojson = JSON.stringify(card.metadata);
+            var fromjson = JSON.parse(tojson);
+
+            if(([client_id] in fromjson) && ('staffid' in fromjson[client_id])){
+              // tilteをstaffid_staffName_workHour_restHour_badge_cardColorへ変換
+              var staffid = fromjson[client_id]['staffid'] || '';
+              var staffName = fromjson[client_id]['staffName'] || '';
+              var workHour = fromjson[client_id]['working_hour'] || '';
+              var restHour = fromjson[client_id]['rest_hour'] || '';
+              var badge = fromjson[client_id]['badge'] || '';
+              var cardColor = fromjson[client_id]['card_color'] || '';
+              card.title = staffid + '_' + staffName + '_' + workHour  + '_' + restHour + '_' + badge + '_' + cardColor;
+            }
+
+          });
+          
+          miro.board.widgets.update(allCards);
+
 
 		    }
 	    }
