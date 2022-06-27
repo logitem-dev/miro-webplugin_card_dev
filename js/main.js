@@ -21,6 +21,7 @@ miro.onReady(() => {
         positionPriority: 1,
         onClick: async () => {
 
+		　const client_id = '3458764516006800161';
           // 全イメージオブジェクトの取得
           var allCards = await miro.board.widgets.get({type: 'IMAGE'});
           
