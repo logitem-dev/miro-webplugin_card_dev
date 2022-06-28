@@ -23,7 +23,6 @@ miro.onReady(() => {
 
 		  const client_id = '3458764516006800161';
 		  const api_uri = 'https://logitem-dev.herokuapp.com/';
-		  const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime) );
 		  
           // 全イメージオブジェクトの取得
           var allCards = await miro.board.widgets.get({type: 'IMAGE'});
@@ -31,7 +30,7 @@ miro.onReady(() => {
           allCards.forEach(card => {
           
 			if(i >0 && i % 10 == 0){
-				await sleep(10000);
+				setTimeout(output, 10000)
 			}
           
             var areaName = "";
