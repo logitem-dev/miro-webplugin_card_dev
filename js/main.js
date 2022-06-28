@@ -54,6 +54,8 @@ miro.onReady(() => {
             }
 
           }
+          
+          alert('変換完了');
 
 
 		    }
