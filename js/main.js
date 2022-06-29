@@ -56,8 +56,8 @@ miro.onReady(() => {
               var staffid = fromjson[client_id]["staffid"] || "";
               var staffName = fromjson[client_id]["staffName"] || "";
               var workHour = fromjson[client_id]["working_hour"] || "";
-              var restHour = fromjson[client_id]["rest_hour"] || "";
-              var badge = fromjson[client_id]["badge"] || "";
+              var restHour = fromjson[client_id]["rest_hour"] || "-";
+              var badge = fromjson[client_id]["badge"] || "0";
               var cardColor = fromjson[client_id]["card_color"] || "";
               card.title =
                 staffid +
