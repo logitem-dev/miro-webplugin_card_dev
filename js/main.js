@@ -31,7 +31,8 @@ miro.onReady(() => {
             return false;
           }
 
-          const client_id = "3458764516006800161";
+//          const client_id = "3458764516006800161";
+          const clinet_id = miro.clientId();
 //          const api_uri = "https://logitem-dev.herokuapp.com/";
           const api_uri = "https://logitemfunc.azurewebsites.net/api/LoadImage/{filename}";
           const sleep = (waitTime) =>
