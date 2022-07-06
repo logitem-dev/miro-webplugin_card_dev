@@ -32,7 +32,8 @@ miro.onReady(() => {
           }
 
           const client_id = "3458764516006800161";
-          const api_uri = "https://logitem-dev.herokuapp.com/";
+//          const api_uri = "https://logitem-dev.herokuapp.com/";
+          const api_uri = "https://logitemfunc.azurewebsites.net/api/LoadImage/{filename}";
           const sleep = (waitTime) =>
             new Promise((resolve) => setTimeout(resolve, waitTime));
 
@@ -71,7 +72,7 @@ miro.onReady(() => {
                 badge +
                 "_" +
                 cardColor;
-              card.url = api_uri + "s3/" + staffid + ".png";
+              card.url = api_uri.replace('{filename}', staffid + '.png');
               miro.board.widgets.update(card);
             }
           }
