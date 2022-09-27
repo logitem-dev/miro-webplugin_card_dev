@@ -53,7 +53,7 @@ miro.onReady(() => {
             var tojson = JSON.stringify(card.metadata);
             var fromjson = JSON.parse(tojson);
 
-            if ([client_id] in fromjson && "staffid" in fromjson[client_id]) {
+            if ([client_id] in fromjson && "staffid" in fromjson[client_id] && !card.title) {
               // tilteをstaffid_staffName_workHour_restHour_badge_cardColorへ変換
               var staffid = fromjson[client_id]["staffid"] || "";
               var staffName = fromjson[client_id]["staffName"] || "";
