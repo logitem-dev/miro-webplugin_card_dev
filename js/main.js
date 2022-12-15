@@ -8,17 +8,6 @@ const iconExportCsv =
 miro.onReady(() => {
   miro.initialize({
     extensionPoints: {
-      bottomBar: {
-        title: "カード登録",
-        svgIcon: iconCard,
-        positionPriority: 1,
-        onClick: async () => {
-          await miro.board.ui.openModal("createsticker.html", {
-            width: 500,
-            height: 650,
-          });
-        },
-      },
       toolbar: {
         title: "カード変換",
         toolbarSvgIcon:
